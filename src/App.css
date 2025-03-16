@@ -1,3 +1,34 @@
+#root {
+  --button-size: min(8.333vw, 40px);
+}
+
+@media (max-width: 768px) {
+  /* Mobile */
+  .chord-grid {
+    width: 100vw;
+  }
+}
+@media (min-width: 769px) {
+}
+
 .App {
   text-align: center;
+
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.chord-button {
+  padding: 0;
+  height: var(--button-size);
+  width: var(--button-size);
+}
+
+.button-text {
+  display: inline-block;
+}
+
+.button-text p {
+  margin: 0;
 }
