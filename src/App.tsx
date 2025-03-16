@@ -7,12 +7,12 @@ import _ from 'lodash';
 function App(): JSX.Element {
   return (
     <div className="App">
-      <Chords reverseSides={true}/>
+      <Chords sameRootRunsDown={true}/>
     </div>
   );
 }
 
-function Chords(props: {reverseSides: boolean}): JSX.Element {
+function Chords(props: {sameRootRunsDown: boolean}): JSX.Element {
   const buttons: JSX.Element[] = [];
   _.range(60, 72).map((rootMidiValue, i) => {
     chords.map((chord, j) => {
@@ -22,8 +22,8 @@ function Chords(props: {reverseSides: boolean}): JSX.Element {
           rootMidiValue={rootMidiValue}
           chord={chord}
           preferSharp={true}
-          column={props.reverseSides ? i + 1 : j + 1}
-          row={props.reverseSides ? j + 1 : i + 1}
+          column={props.sameRootRunsDown ? i + 1 : j + 1}
+          row={props.sameRootRunsDown ? j + 1 : i + 1}
           />);
     });
   });
@@ -62,7 +62,6 @@ function ChordButton(props: {
         gridRowStart: props.row,
       }}>
       <span className='button-text'>
-        {/* {text} */}
         {text}
       </span>
     </button>);
