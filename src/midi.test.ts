@@ -1,3 +1,4 @@
+import { Chord } from './chords';
 import { MidiNote } from './midi';
 
 class MidiTestCase {
@@ -28,5 +29,16 @@ describe('midi standard tests', () => {
     test('midi root only', () => {
         expect(new MidiNote(60).rootString(true)).toBe("C");
         expect(new MidiNote(65).rootString(true)).toBe("F");
+    });
+
+    test('with chord', () => {
+        const note = new MidiNote(100);
+        const testChord: Chord = {
+            name: "Test Chord",
+            abbreviation: "test",
+            formula: [-1, 0, 9],
+            intervals: [],
+        };
+        expect(note.withChord(testChord)).toEqual([99, 100, 109]);
     });
 });
