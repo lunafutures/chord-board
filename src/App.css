@@ -1,12 +1,10 @@
 #root {
   --button-size: min(8.333vw, 40px);
+  background: #111;
 }
 
 @media (max-width: 768px) {
   /* Mobile */
-  .chord-grid {
-    width: 100vw;
-  }
 }
 @media (min-width: 769px) {
 }
@@ -27,8 +25,21 @@
 
 .button-text {
   display: inline-block;
+  line-height: 97%;
 }
 
-.button-text p {
-  margin: 0;
+button {
+  background-color: #222;
+  color: #fff;
+  border: 1px solid #444;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #444;
+}
+
+button:active {
+  background-color: #666;
 }
