@@ -29,7 +29,7 @@ function Chords(props: {sameRootRunsDown: boolean}): JSX.Element {
     });
     
     return <div className="chord-grid" style={{display: "grid"}}>
-            {buttons}
+        {buttons}
     </div>;
 }
 
@@ -64,7 +64,8 @@ function ChordButton(props: {
             <span className='button-text'>
                 {text}
             </span>
-        </button>);
+        </button>
+    );
 }
 
 export default App;
