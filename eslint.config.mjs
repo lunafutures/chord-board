@@ -4,19 +4,19 @@ import pluginReact from "eslint-plugin-react";
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
-  {
-    files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
-    settings: {
-      react: {
-        version: 'detect',
-      }
+    {
+        files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
+        settings: {
+            react: {
+                version: 'detect',
+            }
+        },
+        rules: {
+            semi: [2, "always"],
+            "@typescript-eslint/explicit-function-return-type": "error",
+        },
     },
-    rules: {
-      semi: [2, "always"],
-      "@typescript-eslint/explicit-function-return-type": "error",
-    },
-  },
-  pluginJs.configs.recommended,
-  ...tseslint.configs.recommended,
-  pluginReact.configs.flat.recommended,
+    pluginJs.configs.recommended,
+    ...tseslint.configs.recommended,
+    pluginReact.configs.flat.recommended,
 ];

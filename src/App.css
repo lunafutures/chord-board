@@ -1,45 +1,45 @@
 #root {
-  --button-size: min(8.333vw, 40px);
-  background: #111;
+    --button-size: min(8.333vw, 40px);
+    background: #111;
 }
 
 @media (max-width: 768px) {
-  /* Mobile */
+    /* Mobile */
 }
 @media (min-width: 769px) {
 }
 
 .App {
-  text-align: center;
+    text-align: center;
 
-  display: flex;
-  align-items: center;
-  flex-direction: column;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
 }
 
 .chord-button {
-  padding: 0;
-  height: var(--button-size);
-  width: var(--button-size);
+    padding: 0;
+    height: var(--button-size);
+    width: var(--button-size);
 }
 
 .button-text {
-  display: inline-block;
-  line-height: 97%;
+    display: inline-block;
+    line-height: 97%;
 }
 
 button {
-  background-color: #222;
-  color: #fff;
-  border: 1px solid #444;
-  border-radius: 5px;
-  cursor: pointer;
+    background-color: #222;
+    color: #fff;
+    border: 1px solid #444;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 button:hover {
-  background-color: #444;
+    background-color: #444;
 }
 
 button:active {
-  background-color: #666;
+    background-color: #666;
 }
