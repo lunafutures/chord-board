@@ -87,6 +87,12 @@ export const chords: Chord[] = [
         formula: [0, 4, 7, 11, 14],
         intervals: ["1", "3", "5", "7", "9"]
     },
+    {
+        name: "Power",
+        abbreviation: "5",
+        formula: [0, 7],
+        intervals: ["1", "5"]
+    },
 
     // Advanced Chords
     {
@@ -146,14 +152,8 @@ export const chords: Chord[] = [
         intervals: ["1", "3", "#5", "b7"]
     },
     {
-        name: "Altered (7#9#5)",
-        abbreviation: "7#9#5",
-        formula: [0, 4, 8, 10, 15],
-        intervals: ["1", "3", "#5", "b7", "#9"]
-    },
-    {
         name: "Quartal",
-        abbreviation: "qtl",
+        abbreviation: "quart",
         formula: [0, 5, 10],
         intervals: ["1", "4", "b7"]
     },
