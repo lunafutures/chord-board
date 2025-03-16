@@ -12,8 +12,9 @@ export default [
       }
     },
     rules: {
-      semi: [2, "always"]
-    }
+      semi: [2, "always"],
+      "@typescript-eslint/explicit-function-return-type": "error",
+    },
   },
   pluginJs.configs.recommended,
   ...tseslint.configs.recommended,

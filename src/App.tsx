@@ -4,7 +4,7 @@ import { MidiNote } from './midi';
 import { Chord, chords } from './chords';
 import _ from 'lodash';
 
-function App() {
+function App(): JSX.Element {
   return (
     <div className="App">
       <Chords reverseSides={true}/>
@@ -44,12 +44,12 @@ function ChordButton(props: {
   const rootString = midiNote.rootString(props.preferSharp);
   const text = `${rootString}${'\u200B'}${props.chord.abbreviation}`;
 
-  function mouseDown() {
+  function mouseDown(): void {
     console.log(`Down: ${rootString} ${props.chord.name}`);
     console.log(`Should play notes: ${midiNote.withChord(props.chord)}`);
   }
 
-  function mouseUp() {
+  function mouseUp(): void {
   }
 
   return (
