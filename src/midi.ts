@@ -1,16 +1,16 @@
 export class MidiNote {
     constructor(public midiValue: number) { }
 
-    toString(preferSharp: boolean): String {
-        let rootValue = this.midiValue % 12
-        let rootString = rootValueToString(rootValue, preferSharp)
-        let octave = Math.floor(this.midiValue / 12) - 1
+    toString(preferSharp: boolean): string {
+        const rootValue = this.midiValue % 12
+        const rootString = rootValueToString(rootValue, preferSharp)
+        const octave = Math.floor(this.midiValue / 12) - 1
 
         return `${rootString}${octave}`
     }
 }
 
-function rootValueToString(value: number, preferSharp: boolean): String {
+function rootValueToString(value: number, preferSharp: boolean): string {
     switch(value) {
         case 0: return "C";
         case 1: return preferSharp ? "C#" : "Db";
