@@ -10,6 +10,9 @@ export default [
       react: {
         version: 'detect',
       }
+    },
+    rules: {
+      semi: [2, "always"]
     }
   },
   pluginJs.configs.recommended,

@@ -24,4 +24,9 @@ describe('midi standard tests', () => {
         expect(new MidiNote(inputValue).toString(preferSharp))
             .toStrictEqual(expectedString);
     });
+
+    test('midi root only', () => {
+        expect(new MidiNote(60).rootString(true)).toBe("C");
+        expect(new MidiNote(65).rootString(true)).toBe("F");
+    });
 });
