@@ -1,6 +1,9 @@
+body {
+    background: #111;
+}
+
 #root {
     --button-size: min(8.333vw, 40px);
-    background: #111;
 }
 
 @media (max-width: 768px) {
