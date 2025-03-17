@@ -3,6 +3,7 @@ import './App.css';
 import { MidiNote } from './midi';
 import { Chord, chords } from './chords';
 import _ from 'lodash';
+import { PolySynth, now } from 'tone';
 
 function App(): JSX.Element {
     return (
@@ -46,7 +47,14 @@ function ChordButton(props: {
 
     function mouseDown(): void {
         console.log(`Down: ${rootString} ${props.chord.name}`);
-        console.log(`Should play notes: ${midiNote.withChord(props.chord)}`);
+        const notes = _.flatMap(midiNote.withChord(props.chord), (value: number) => {
+            return [
+                new MidiNote(value).toString(props.preferSharp),
+            ];
+        });
+        console.log(`Should play notes: ${notes}`);
+        const synth = new PolySynth().toDestination();
+        synth.triggerAttackRelease(notes, "4n", now());
     }
 
     function mouseUp(): void {
