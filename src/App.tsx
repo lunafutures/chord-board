@@ -3,7 +3,7 @@ import './App.css';
 import { MidiNote } from './midi';
 import { Chord, chords } from './chords';
 import _ from 'lodash';
-import { PolySynth, now } from 'tone';
+import { PolySynth, now as toneNow, start as toneStart } from 'tone';
 
 function App(): JSX.Element {
     return (
@@ -52,9 +52,10 @@ function ChordButton(props: {
                 new MidiNote(value).toString(props.preferSharp),
             ];
         });
+        toneStart();
         console.log(`Should play notes: ${notes}`);
-        const synth = new PolySynth().toDestination();
-        synth.triggerAttackRelease(notes, "4n", now());
+        const synth = new PolySynth({maxPolyphony: 12}).toDestination();
+        synth.triggerAttackRelease(notes, "4n", toneNow());
     }
 
     function mouseUp(): void {
