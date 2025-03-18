@@ -1,0 +1,9 @@
+.range-slider-container {
+    min-width: 500px;
+}
+
+.range-slider-auxiliary-settings {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
