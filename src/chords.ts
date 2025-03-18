@@ -114,8 +114,8 @@ export const chords: Chord[] = [
         intervals: ["1", "3", "5", "7", "9", "11"]
     },
     {
-        name: "7#9",
-        abbreviation: "7#9",
+        name: "7♯9",
+        abbreviation: "7♯9",
         formula: [0, 4, 7, 10, 15],
         intervals: ["1", "3", "5", "b7", "#9"]
     },
@@ -146,8 +146,8 @@ export const chords: Chord[] = [
         intervals: ["1", "3", "5", "b7", "b9"]
     },
     {
-        name: "7#5",
-        abbreviation: "7#5",
+        name: "7♯5",
+        abbreviation: "7♯5",
         formula: [0, 4, 8, 10],
         intervals: ["1", "3", "#5", "b7"]
     },
