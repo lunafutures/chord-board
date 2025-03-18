@@ -58,7 +58,6 @@ export function MusicalRangeSlider({
                     return `${midiToString(value, preferSharp, stylized)} (${value})`;
                 }}
                 onChange={function (event: Event, value: number | number[], activeThumb: number) {
-                    console.log("shift?", thumbsToMove, "activeThumb?", activeThumb, "value?", value);
                     if (value instanceof Array && value.length == 2) {
                         const [first, second] = value;
                         if (thumbsToMove == ThumbsToMove.Both) {
@@ -71,7 +70,6 @@ export function MusicalRangeSlider({
                                 const deltaUpperLimit = midiMax - Math.max(oldFirst, oldSecond);
                                 const deltaLowerLimit = midiMin - Math.min(oldFirst, oldSecond);
                                 const coercedDelta = coerce(delta, deltaLowerLimit, deltaUpperLimit);
-                                console.log("delta", delta, "deltaLowerLimit", deltaLowerLimit, "deltaUpperLimit", deltaUpperLimit, "coercedDelta", coercedDelta);
                                 return [oldFirst + coercedDelta, oldSecond + coercedDelta];
                             });
                         } else {
