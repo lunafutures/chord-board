@@ -15,6 +15,8 @@ export interface MusicalRangeSliderProps {
     stylized: boolean,
     valueLabelDisplay: 'on' | 'auto' | 'off',
     color: 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning',
+    /** Shows a the midi number of the note after the note in the label, e.g. "C3 (48)".*/
+    showMidiValues: boolean,
     ariaLabel: string,
     onValuesChanged: (event: Event, value: number | number[], activeThumb: number) => void,
 }
@@ -42,6 +44,7 @@ export function MusicalRangeSlider({
     stylized = true,
     valueLabelDisplay,
     color,
+    showMidiValues,
     onValuesChanged,
     ariaLabel = "Musical Range Slider",
 }: MusicalRangeSliderProps): JSX.Element {
@@ -55,7 +58,8 @@ export function MusicalRangeSlider({
                 getAriaLabel={() => ariaLabel}
                 value={values}
                 valueLabelFormat={(value: number) => {
-                    return `${midiToString(value, preferSharp, stylized)} (${value})`;
+                    const midiString = midiToString(value, preferSharp, stylized);
+                    return showMidiValues ? `${midiString} (${value})` : midiString;
                 }}
                 onChange={function (event: Event, value: number | number[], activeThumb: number) {
                     if (value instanceof Array && value.length == 2) {

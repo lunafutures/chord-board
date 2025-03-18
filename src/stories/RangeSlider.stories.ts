@@ -26,6 +26,7 @@ export const Slider: Story = {
         stylized: true,
         valueLabelDisplay: 'on',
         color: 'primary',
+        showMidiValues: true,
         onValuesChanged: () => {},
     },
 };
