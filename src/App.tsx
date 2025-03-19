@@ -1,13 +1,29 @@
 import React, { JSX } from 'react';
 import './App.css';
-import { MidiNote } from './midi';
+import { C3_midi, C5_midi, MidiNote } from './midi';
 import { Chord, chords } from './chords';
 import _ from 'lodash';
 import { PolySynth, now as toneNow, start as toneStart } from 'tone';
+import { MusicalRangeMidiMaxDefault, MusicalRangeMidiMinDefault, MusicalRangeSlider } from './stories/RangeSlider';
 
 function App(): JSX.Element {
+    const range = React.useRef([NaN, NaN]);
     return (
         <div className="App">
+            <MusicalRangeSlider
+                midiMin={MusicalRangeMidiMinDefault}
+                midiMax={MusicalRangeMidiMaxDefault}
+                initialValues={[C3_midi, C5_midi]}
+                preferSharp={false}
+                stylized={true}
+                valueLabelDisplay={'on'}
+                color={'primary'}
+                showMidiValues={true}
+                onValuesChanged={(rangeStart, rangeEnd) => {
+                    range.current = [rangeStart, rangeEnd];
+                }}
+                ariaLabel='Note Range Picker'
+                />
             <Chords sameRootRunsDown={true}/>
         </div>
     );
@@ -45,14 +61,14 @@ function ChordButton(props: {
     const rootString = midiNote.rootString(props.preferSharp);
     const text = `${rootString}${'\u200B'}${props.chord.abbreviation}`;
 
-    function mouseDown(): void {
+    async function mouseDown(): Promise<void> {
         console.log(`Down: ${rootString} ${props.chord.name}`);
         const notes = _.flatMap(midiNote.withChord(props.chord), (value: number) => {
             return [
                 new MidiNote(value).toString(props.preferSharp),
             ];
         });
-        toneStart();
+        await toneStart();
         console.log(`Should play notes: ${notes}`);
         const synth = new PolySynth({maxPolyphony: 12}).toDestination();
         synth.triggerAttackRelease(notes, "4n", toneNow());

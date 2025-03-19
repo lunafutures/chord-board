@@ -18,7 +18,7 @@ export interface MusicalRangeSliderProps {
     /** Shows a the midi number of the note after the note in the label, e.g. "C3 (48)".*/
     showMidiValues: boolean,
     ariaLabel: string,
-    onValuesChanged: (event: Event, value: number | number[], activeThumb: number) => void,
+    onValuesChanged: (first: number, last: number) => void,
 }
 
 export const MusicalRangeMidiMinDefault = A0_midi;
@@ -50,6 +50,7 @@ export function MusicalRangeSlider({
 }: MusicalRangeSliderProps): JSX.Element {
     const [values, setValues] = React.useState(initialValues);
     const [thumbsToMove, setThumbsToMove] = React.useState(ThumbsToMoveDefault);
+
     return (
         <div className="range-slider-container">
             <Slider
@@ -74,12 +75,16 @@ export function MusicalRangeSlider({
                                 const deltaUpperLimit = midiMax - Math.max(oldFirst, oldSecond);
                                 const deltaLowerLimit = midiMin - Math.min(oldFirst, oldSecond);
                                 const coercedDelta = coerce(delta, deltaLowerLimit, deltaUpperLimit);
-                                return [oldFirst + coercedDelta, oldSecond + coercedDelta];
+
+                                const newFirst = oldFirst + coercedDelta;
+                                const newSecond = oldSecond + coercedDelta;
+                                onValuesChanged(newFirst, newSecond);
+                                return [newFirst, newSecond];
                             });
                         } else {
+                            onValuesChanged(first, second);
                             setValues([first, second]);
                         }
-                        onValuesChanged(event, value, activeThumb);
                     }
                 }}
                 valueLabelDisplay={valueLabelDisplay}
