@@ -64,8 +64,8 @@ export const chords: Chord[] = [
         intervals: ["1", "4", "5"]
     },
     {
-        name: "Minor 7b5",
-        abbreviation: "m7b5",
+        name: "Minor 7♭5",
+        abbreviation: "m7♭5",
         formula: [0, 3, 6, 10],
         intervals: ["1", "b3", "b5", "b7"]
     },
