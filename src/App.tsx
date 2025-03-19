@@ -3,8 +3,9 @@ import './App.css';
 import { C3_midi, C5_midi, MidiNote } from './midi';
 import { Chord, chords } from './chords';
 import _ from 'lodash';
-import { PolySynth, now as toneNow, start as toneStart } from 'tone';
+import { PolySynth, now as toneNow } from 'tone';
 import { MusicalRangeMidiMaxDefault, MusicalRangeMidiMinDefault, MusicalRangeSlider } from './stories/RangeSlider';
+import { resumeAudioContext } from './toneManager';
 
 function App(): JSX.Element {
     const range = React.useRef([NaN, NaN]);
@@ -59,7 +60,8 @@ function ChordButton(props: {
 }): JSX.Element {
     const midiNote = new MidiNote(props.rootMidiValue);
     const rootString = midiNote.rootString(props.preferSharp);
-    const text = `${rootString}${'\u200B'}${props.chord.abbreviation}`;
+    const abbrChordName = `${rootString}${'\u200B'}${props.chord.abbreviation}`;
+    const synth = React.useMemo(() => new PolySynth({maxPolyphony: 12}).toDestination(), []);
 
     async function mouseDown(): Promise<void> {
         console.log(`Down: ${rootString} ${props.chord.name}`);
@@ -68,9 +70,9 @@ function ChordButton(props: {
                 new MidiNote(value).toString(props.preferSharp),
             ];
         });
-        await toneStart();
+        await resumeAudioContext();
         console.log(`Should play notes: ${notes}`);
-        const synth = new PolySynth({maxPolyphony: 12}).toDestination();
+        synth.volume.value = -6;
         synth.triggerAttackRelease(notes, "4n", toneNow());
     }
 
@@ -79,6 +81,7 @@ function ChordButton(props: {
 
     return (
         <button
+            key={abbrChordName}
             className="chord-button"
             onMouseDown={mouseDown}
             onMouseUp={mouseUp}
@@ -87,7 +90,7 @@ function ChordButton(props: {
                 gridRowStart: props.row,
             }}>
             <span className='button-text'>
-                {text}
+                {abbrChordName}
             </span>
         </button>
     );
