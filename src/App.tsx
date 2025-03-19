@@ -6,27 +6,36 @@ import _ from 'lodash';
 import { PolySynth, now as toneNow } from 'tone';
 import { MusicalRangeMidiMaxDefault, MusicalRangeMidiMinDefault, MusicalRangeSlider } from './stories/RangeSlider';
 import { resumeAudioContext } from './toneManager';
+import { createTheme, ThemeProvider } from '@mui/material';
+
+const darkTheme = createTheme({
+    palette: {
+        mode: 'dark',
+    },
+});
 
 function App(): JSX.Element {
     const range = React.useRef([NaN, NaN]);
     return (
-        <div className="App">
-            <MusicalRangeSlider
-                midiMin={MusicalRangeMidiMinDefault}
-                midiMax={MusicalRangeMidiMaxDefault}
-                initialValues={[C3_midi, C5_midi]}
-                preferSharp={false}
-                stylized={true}
-                valueLabelDisplay={'on'}
-                color={'primary'}
-                showMidiValues={true}
-                onValuesChanged={(rangeStart, rangeEnd) => {
-                    range.current = [rangeStart, rangeEnd];
-                }}
-                ariaLabel='Note Range Picker'
+        <ThemeProvider theme={darkTheme}>
+            <div className="App">
+                <MusicalRangeSlider
+                    midiMin={MusicalRangeMidiMinDefault}
+                    midiMax={MusicalRangeMidiMaxDefault}
+                    initialValues={[C3_midi, C5_midi]}
+                    preferSharp={false}
+                    stylized={true}
+                    valueLabelDisplay={'on'}
+                    color={'primary'}
+                    showMidiValues={true}
+                    onValuesChanged={(rangeStart, rangeEnd) => {
+                        range.current = [rangeStart, rangeEnd];
+                    }}
+                    ariaLabel='Note Range Picker'
                 />
-            <Chords sameRootRunsDown={true}/>
-        </div>
+                <Chords sameRootRunsDown={true} />
+            </div>
+        </ThemeProvider>
     );
 }
 
