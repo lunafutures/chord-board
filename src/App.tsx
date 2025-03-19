@@ -15,33 +15,38 @@ const darkTheme = createTheme({
 });
 
 function App(): JSX.Element {
-    const range = React.useRef([NaN, NaN]);
+    const initialRange: [number, number] = [C3_midi, C5_midi];
+    const [range, setRange] = React.useState(initialRange);
     return (
         <ThemeProvider theme={darkTheme}>
             <div className="App">
                 <MusicalRangeSlider
                     midiMin={MusicalRangeMidiMinDefault}
                     midiMax={MusicalRangeMidiMaxDefault}
-                    initialValues={[C3_midi, C5_midi]}
+                    initialValues={initialRange}
                     preferSharp={false}
                     stylized={true}
                     valueLabelDisplay={'on'}
                     color={'primary'}
                     showMidiValues={true}
                     onValuesChanged={(rangeStart, rangeEnd) => {
-                        range.current = [rangeStart, rangeEnd];
+                        setRange([rangeStart, rangeEnd]);
                     }}
                     ariaLabel='Note Range Picker'
-                />
-                <Chords sameRootRunsDown={true} />
+                    />
+                <Chords
+                    sameRootRunsDown={true}
+                    rangeLow={range[0]}
+                    rangeHigh={range[1]}
+                    />
             </div>
         </ThemeProvider>
     );
 }
 
-function Chords(props: {sameRootRunsDown: boolean}): JSX.Element {
+function Chords(props: {sameRootRunsDown: boolean, rangeLow: number, rangeHigh: number}): JSX.Element {
     const buttons: JSX.Element[] = [];
-    _.range(60, 72).map((rootMidiValue, i) => {
+    _.range(0, 12).map((rootMidiValue, i) => {
         chords.map((chord, j) => {
             buttons.push(
                 <ChordButton
@@ -51,6 +56,8 @@ function Chords(props: {sameRootRunsDown: boolean}): JSX.Element {
                     preferSharp={true}
                     column={props.sameRootRunsDown ? i + 1 : j + 1}
                     row={props.sameRootRunsDown ? j + 1 : i + 1}
+                    rangeLow={props.rangeLow}
+                    rangeHigh={props.rangeHigh}
                     />);
         });
     });
@@ -60,29 +67,39 @@ function Chords(props: {sameRootRunsDown: boolean}): JSX.Element {
     </div>;
 }
 
+const allOctaveSet = _.range(12, MusicalRangeMidiMaxDefault, 12);
 function ChordButton(props: {
     rootMidiValue: number,
     chord: Chord,
     preferSharp: boolean,
     column: number,
     row: number,
+    rangeLow: number,
+    rangeHigh: number
 }): JSX.Element {
     const midiNote = new MidiNote(props.rootMidiValue);
     const rootString = midiNote.rootString(props.preferSharp);
     const abbrChordName = `${rootString}${'\u200B'}${props.chord.abbreviation}`;
     const synth = React.useMemo(() => new PolySynth({maxPolyphony: 12}).toDestination(), []);
 
+    function noteStr(value: number): string {
+        return new MidiNote(value).toString(props.preferSharp);
+    }
+
     async function mouseDown(): Promise<void> {
-        console.log(`Down: ${rootString} ${props.chord.name}`);
-        const notes = _.flatMap(midiNote.withChord(props.chord), (value: number) => {
-            return [
-                new MidiNote(value).toString(props.preferSharp),
-            ];
-        });
+        const notes = _
+            .flatMap(midiNote.withChord(props.chord), (value: number) => {
+                return allOctaveSet.map(o => value + o);
+            })
+            .sort()
+            .filter((value) => props.rangeLow <= value && value < props.rangeHigh)
+            .map(value => noteStr(value));
+
         await resumeAudioContext();
-        console.log(`Should play notes: ${notes}`);
+        console.log(`Limiting to notes between ${noteStr(props.rangeLow)} and ${noteStr(props.rangeHigh)}`);
+        console.log(`Playing notes: ${notes}`);
         synth.volume.value = -6;
-        synth.triggerAttackRelease(notes, "4n", toneNow());
+        synth.triggerAttackRelease(notes, "1n");
     }
 
     function mouseUp(): void {
