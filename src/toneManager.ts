@@ -13,7 +13,7 @@ export async function resumeAudioContext(): Promise<void> {
             }
             console.log(`Audio context resumed. New state: ${getContext().state}`);
         } catch (e) {
-            console.log("Failed to resume audio context:", e);
+            console.error("Failed to resume audio context:", e);
         }
     }
 }
