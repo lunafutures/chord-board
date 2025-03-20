@@ -105,8 +105,8 @@ function InactivityChecker(props: { threshold: number }): JSX.Element {
 function Chords(props: {sameRootRunsDown: boolean}): JSX.Element {
     const buttons: JSX.Element[] = [];
     _.range(0, 12).map((rootMidiValue, i) => {
-        chords.map((chord, j) => {
-            buttons.push(
+        return chords.map((chord, j) => {
+            return buttons.push(
                 <ChordButton
                     key={`${rootMidiValue}-${chord.name}`}
                     rootMidiValue={rootMidiValue}
