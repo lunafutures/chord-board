@@ -8,6 +8,8 @@ import { MusicalRangeMidiMaxDefault, MusicalRangeMidiMinDefault, MusicalRangeSli
 import { resumeAudioContext } from './toneManager';
 import { createTheme, ThemeProvider } from '@mui/material';
 
+const INACTIVITY_THRESHOLD = 5 * 60 * 1000;
+
 const darkTheme = createTheme({
     palette: {
         mode: 'dark',
@@ -19,32 +21,65 @@ function App(): JSX.Element {
     const initialRange: [number, number] = [C3_midi, C5_midi];
     const [range, setRange] = React.useState(initialRange);
     const synth: MySynth = React.useMemo(() => new PolySynth({maxPolyphony: 100}).toDestination(), []);
+
     return (
         <ThemeProvider theme={darkTheme}>
-            <div className="App">
-                <MusicalRangeSlider
-                    midiMin={MusicalRangeMidiMinDefault}
-                    midiMax={MusicalRangeMidiMaxDefault}
-                    initialValues={initialRange}
-                    preferSharp={false}
-                    stylized={true}
-                    valueLabelDisplay={'on'}
-                    color={'primary'}
-                    showMidiValues={true}
-                    onValuesChanged={(rangeStart, rangeEnd) => {
-                        setRange([rangeStart, rangeEnd]);
-                    }}
-                    ariaLabel='Note Range Picker'
+            <InactivityChecker threshold={INACTIVITY_THRESHOLD}>
+                <div className="App">
+                    <MusicalRangeSlider
+                        midiMin={MusicalRangeMidiMinDefault}
+                        midiMax={MusicalRangeMidiMaxDefault}
+                        initialValues={initialRange}
+                        preferSharp={false}
+                        stylized={true}
+                        valueLabelDisplay={'on'}
+                        color={'primary'}
+                        showMidiValues={true}
+                        onValuesChanged={(rangeStart, rangeEnd) => {
+                            setRange([rangeStart, rangeEnd]);
+                        }}
+                        ariaLabel='Note Range Picker'
                     />
-                <Chords
-                    sameRootRunsDown={true}
-                    rangeLow={range[0]}
-                    rangeHigh={range[1]}
-                    synth={synth}
+                    <Chords
+                        sameRootRunsDown={true}
+                        rangeLow={range[0]}
+                        rangeHigh={range[1]}
+                        synth={synth}
                     />
-            </div>
+                </div>
+            </InactivityChecker>
         </ThemeProvider>
     );
+}
+
+function InactivityChecker(props: { threshold: number, children: JSX.Element | JSX.Element[] }): JSX.Element {
+    const visibilityChangeTimeRef = React.useRef<number | null>(null);
+
+    React.useEffect(() => {
+        function handleVisibilityChange(): void {
+            if (document.hidden) {
+                console.log(`Document is hidden at ${new Date(Date.now())}`);
+                visibilityChangeTimeRef.current = Date.now();
+            } else {
+                console.log(`Document is visible at ${new Date(Date.now())}`);
+                if (visibilityChangeTimeRef.current !== null) {
+                    const inactivityDuration = Date.now() - visibilityChangeTimeRef.current;
+                    console.log(`Document was hidden for ${inactivityDuration} ms.`);
+                    if (inactivityDuration > INACTIVITY_THRESHOLD) {
+                        console.log('Reloading page...');
+                        window.location.reload();
+                    }
+                }
+            }
+        }
+        
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        return (): void => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+        };
+    });
+
+    return <>{props.children}</>;
 }
 
 function Chords(props: {sameRootRunsDown: boolean, rangeLow: number, rangeHigh: number, synth: MySynth}): JSX.Element {
