@@ -72,7 +72,7 @@ function InactivityChecker(props: { threshold: number, children: JSX.Element | J
                 if (visibilityChangeTimeRef.current !== null) {
                     const inactivityDuration = Date.now() - visibilityChangeTimeRef.current;
                     console.log(`Document was hidden for ${inactivityDuration} ms.`);
-                    if (inactivityDuration > INACTIVITY_THRESHOLD) {
+                    if (inactivityDuration > props.threshold) {
                         console.log('Reloading page...');
                         window.location.reload();
                     }
