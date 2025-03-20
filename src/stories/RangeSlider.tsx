@@ -63,27 +63,26 @@ export function MusicalRangeSlider({
                     return showMidiValues ? `${midiString} (${value})` : midiString;
                 }}
                 onChange={function (event: Event, value: number | number[], activeThumb: number) {
-                    if (value instanceof Array && value.length == 2) {
+                    if (value instanceof Array && value.length === 2) {
                         const [first, second] = value;
-                        if (thumbsToMove == ThumbsToMove.Both) {
-                            setValues(old => {
-                                const [oldFirst, oldSecond] = old;
-                                const delta = (activeThumb == 0)
-                                    ? first - oldFirst
-                                    : second - oldSecond;
+                        if (thumbsToMove === ThumbsToMove.Both) {
+                            const [oldFirst, oldSecond] = values;
+                            const delta = (activeThumb === 0)
+                                ? first - oldFirst
+                                : second - oldSecond;
 
-                                const deltaUpperLimit = midiMax - Math.max(oldFirst, oldSecond);
-                                const deltaLowerLimit = midiMin - Math.min(oldFirst, oldSecond);
-                                const coercedDelta = coerce(delta, deltaLowerLimit, deltaUpperLimit);
+                            const deltaUpperLimit = midiMax - Math.max(oldFirst, oldSecond);
+                            const deltaLowerLimit = midiMin - Math.min(oldFirst, oldSecond);
+                            const coercedDelta = coerce(delta, deltaLowerLimit, deltaUpperLimit);
 
-                                const newFirst = oldFirst + coercedDelta;
-                                const newSecond = oldSecond + coercedDelta;
-                                onValuesChanged(newFirst, newSecond);
-                                return [newFirst, newSecond];
-                            });
+                            const newFirst = oldFirst + coercedDelta;
+                            const newSecond = oldSecond + coercedDelta;
+
+                            setValues([newFirst, newSecond]);
+                            onValuesChanged(newFirst, newSecond);
                         } else {
-                            onValuesChanged(first, second);
                             setValues([first, second]);
+                            onValuesChanged(first, second);
                         }
                     }
                 }}
