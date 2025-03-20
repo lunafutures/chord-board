@@ -140,8 +140,8 @@ export const chords: Chord[] = [
 
     // Optional Chords
     {
-        name: "7b9",
-        abbreviation: "7b9",
+        name: "7♭9",
+        abbreviation: "7♭9",
         formula: [0, 4, 7, 10, 13],
         intervals: ["1", "3", "5", "b7", "b9"]
     },
