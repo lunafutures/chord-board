@@ -88,7 +88,7 @@ function Chords(props: {sameRootRunsDown: boolean, rangeLow: number, rangeHigh: 
         chords.map((chord, j) => {
             buttons.push(
                 <ChordButton
-                    key={1}
+                    key={`${rootMidiValue}-${chord.name}`}
                     rootMidiValue={rootMidiValue}
                     chord={chord}
                     preferSharp={true}
