@@ -24,42 +24,41 @@ function App(): JSX.Element {
 
     return (
         <ThemeProvider theme={darkTheme}>
-            <InactivityChecker threshold={INACTIVITY_THRESHOLD}>
-                <div className="App">
-                    <div className="range-section">
-                        <span className="large-label" style={{gridRowStart: 1, textAlign: 'left'}}>
-                            Play chord notes between:
-                        </span>
-                        <div style={{gridRowStart: 2}}>
-                            <MusicalRangeSlider
-                                midiMin={MusicalRangeMidiMinDefault}
-                                midiMax={MusicalRangeMidiMaxDefault}
-                                initialValues={initialRange}
-                                preferSharp={false}
-                                stylized={true}
-                                valueLabelDisplay={'on'}
-                                color={'primary'}
-                                showMidiValues={true}
-                                onValuesChanged={(rangeStart, rangeEnd) => {
-                                    setRange([rangeStart, rangeEnd]);
-                                }}
-                                ariaLabel='Note Range Picker'
-                            />
-                        </div>
+            <InactivityChecker threshold={INACTIVITY_THRESHOLD} />
+            <div className="App">
+                <div className="range-section">
+                    <span className="large-label" style={{ gridRowStart: 1, textAlign: 'left' }}>
+                        Play chord notes between:
+                    </span>
+                    <div style={{ gridRowStart: 2 }}>
+                        <MusicalRangeSlider
+                            midiMin={MusicalRangeMidiMinDefault}
+                            midiMax={MusicalRangeMidiMaxDefault}
+                            initialValues={initialRange}
+                            preferSharp={false}
+                            stylized={true}
+                            valueLabelDisplay={'on'}
+                            color={'primary'}
+                            showMidiValues={true}
+                            onValuesChanged={(rangeStart, rangeEnd) => {
+                                setRange([rangeStart, rangeEnd]);
+                            }}
+                            ariaLabel='Note Range Picker'
+                        />
                     </div>
-                    <Chords
-                        sameRootRunsDown={true}
-                        rangeLow={range[0]}
-                        rangeHigh={range[1]}
-                        synth={synth}
-                    />
                 </div>
-            </InactivityChecker>
+                <Chords
+                    sameRootRunsDown={true}
+                    rangeLow={range[0]}
+                    rangeHigh={range[1]}
+                    synth={synth}
+                />
+            </div>
         </ThemeProvider>
     );
 }
 
-function InactivityChecker(props: { threshold: number, children: JSX.Element | JSX.Element[] }): JSX.Element {
+function InactivityChecker(props: { threshold: number }): JSX.Element {
     const visibilityChangeTimeRef = React.useRef<number | null>(null);
 
     React.useEffect(() => {
@@ -86,7 +85,7 @@ function InactivityChecker(props: { threshold: number, children: JSX.Element | J
         };
     });
 
-    return <>{props.children}</>;
+    return <></>;
 }
 
 function Chords(props: {sameRootRunsDown: boolean, rangeLow: number, rangeHigh: number, synth: MySynth}): JSX.Element {
