@@ -26,20 +26,27 @@ function App(): JSX.Element {
         <ThemeProvider theme={darkTheme}>
             <InactivityChecker threshold={INACTIVITY_THRESHOLD}>
                 <div className="App">
-                    <MusicalRangeSlider
-                        midiMin={MusicalRangeMidiMinDefault}
-                        midiMax={MusicalRangeMidiMaxDefault}
-                        initialValues={initialRange}
-                        preferSharp={false}
-                        stylized={true}
-                        valueLabelDisplay={'on'}
-                        color={'primary'}
-                        showMidiValues={true}
-                        onValuesChanged={(rangeStart, rangeEnd) => {
-                            setRange([rangeStart, rangeEnd]);
-                        }}
-                        ariaLabel='Note Range Picker'
-                    />
+                    <div className="range-section">
+                        <span className="large-label" style={{gridRowStart: 1, textAlign: 'left'}}>
+                            Play chord notes between:
+                        </span>
+                        <div style={{gridRowStart: 2}}>
+                            <MusicalRangeSlider
+                                midiMin={MusicalRangeMidiMinDefault}
+                                midiMax={MusicalRangeMidiMaxDefault}
+                                initialValues={initialRange}
+                                preferSharp={false}
+                                stylized={true}
+                                valueLabelDisplay={'on'}
+                                color={'primary'}
+                                showMidiValues={true}
+                                onValuesChanged={(rangeStart, rangeEnd) => {
+                                    setRange([rangeStart, rangeEnd]);
+                                }}
+                                ariaLabel='Note Range Picker'
+                            />
+                        </div>
+                    </div>
                     <Chords
                         sameRootRunsDown={true}
                         rangeLow={range[0]}

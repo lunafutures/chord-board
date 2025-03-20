@@ -22,6 +22,17 @@ body {
     gap: 10px;
 }
 
+.large-label {
+    color: white;
+    font-family: Roboto, sans-serif;
+    font-size: large;
+}
+
+.range-section {
+    display: grid;
+    grid-template-rows: 2;
+}
+
 .chord-button {
     padding: 0;
     height: var(--button-size);
