@@ -16,11 +16,22 @@ const darkTheme = createTheme({
     },
 });
 
+interface ChordSettings {
+    synth: MySynth;
+    rangeLow: number;
+    rangeHigh: number;
+    preferSharp: boolean;
+}
+
+const ChordSettingsContext = React.createContext<ChordSettings>(null as unknown as ChordSettings);
+
 type MySynth = PolySynth<Synth<SynthOptions>>;
 function App(): JSX.Element {
     const initialRange: [number, number] = [C3_midi, C5_midi];
     const [range, setRange] = React.useState(initialRange);
     const synth: MySynth = React.useMemo(() => new PolySynth({maxPolyphony: 100}).toDestination(), []);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [preferSharp, setPreferSharp] = React.useState(false);
 
     return (
         <ThemeProvider theme={darkTheme}>
@@ -35,7 +46,7 @@ function App(): JSX.Element {
                             midiMin={MusicalRangeMidiMinDefault}
                             midiMax={MusicalRangeMidiMaxDefault}
                             initialValues={initialRange}
-                            preferSharp={false}
+                            preferSharp={preferSharp}
                             stylized={true}
                             valueLabelDisplay={'on'}
                             color={'primary'}
@@ -47,12 +58,15 @@ function App(): JSX.Element {
                         />
                     </div>
                 </div>
-                <Chords
-                    sameRootRunsDown={true}
-                    rangeLow={range[0]}
-                    rangeHigh={range[1]}
-                    synth={synth}
-                />
+                <ChordSettingsContext.Provider
+                    value={{
+                        synth,
+                        rangeLow: range[0],
+                        rangeHigh: range[1],
+                        preferSharp: preferSharp,
+                    }}>
+                    <Chords sameRootRunsDown={true} />
+                </ChordSettingsContext.Provider>
             </div>
         </ThemeProvider>
     );
@@ -88,7 +102,7 @@ function InactivityChecker(props: { threshold: number }): JSX.Element {
     return <></>;
 }
 
-function Chords(props: {sameRootRunsDown: boolean, rangeLow: number, rangeHigh: number, synth: MySynth}): JSX.Element {
+function Chords(props: {sameRootRunsDown: boolean}): JSX.Element {
     const buttons: JSX.Element[] = [];
     _.range(0, 12).map((rootMidiValue, i) => {
         chords.map((chord, j) => {
@@ -97,12 +111,8 @@ function Chords(props: {sameRootRunsDown: boolean, rangeLow: number, rangeHigh: 
                     key={`${rootMidiValue}-${chord.name}`}
                     rootMidiValue={rootMidiValue}
                     chord={chord}
-                    preferSharp={true}
                     column={props.sameRootRunsDown ? i + 1 : j + 1}
                     row={props.sameRootRunsDown ? j + 1 : i + 1}
-                    rangeLow={props.rangeLow}
-                    rangeHigh={props.rangeHigh}
-                    synth={props.synth}
                     />);
         });
     });
@@ -116,19 +126,20 @@ const allOctaveSet = _.range(12, MusicalRangeMidiMaxDefault, 12);
 function ChordButton(props: {
     rootMidiValue: number,
     chord: Chord,
-    preferSharp: boolean,
     column: number,
     row: number,
-    rangeLow: number,
-    rangeHigh: number,
-    synth: MySynth,
 }): JSX.Element {
     const midiNote = new MidiNote(props.rootMidiValue);
-    const rootString = midiNote.rootString(props.preferSharp);
+    const settings = React.useContext(ChordSettingsContext);
+    const rootString = midiNote.rootString(settings.preferSharp);
     const abbrChordName = `${rootString}${'\u200B'}${props.chord.abbreviation}`;
 
+    if (settings == null) {
+        return <></>;
+    }
+
     function noteStr(value: number): string {
-        return new MidiNote(value).toString(props.preferSharp);
+        return new MidiNote(value).toString(settings.preferSharp);
     }
 
     async function mouseDown(): Promise<void> {
@@ -137,20 +148,20 @@ function ChordButton(props: {
                 return allOctaveSet.map(o => value + o);
             })
             .sort()
-            .filter((value) => props.rangeLow <= value && value < props.rangeHigh)
+            .filter((value) => settings.rangeLow <= value && value < settings.rangeHigh)
             .map(value => noteStr(value));
 
         await resumeAudioContext();
-        console.log(`Limiting to notes between ${noteStr(props.rangeLow)} and ${noteStr(props.rangeHigh)}`);
+        console.log(`Limiting to notes between ${noteStr(settings.rangeLow)} and ${noteStr(settings.rangeHigh)}`);
         console.log(`Playing notes: ${notes}`);
         // TODO: Handle time differently if in mobile or desktop
-        props.synth.volume.value = -6;
-        props.synth.releaseAll();
-        props.synth.triggerAttack(notes);
+        settings.synth.volume.value = -6;
+        settings.synth.releaseAll();
+        settings.synth.triggerAttack(notes);
     }
 
     function mouseUp(): void {
-        props.synth.releaseAll(toneNow() + 0.3);
+        settings.synth.releaseAll(toneNow() + 0.3);
     }
 
     return (
