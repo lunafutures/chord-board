@@ -4,7 +4,7 @@ body {
 
 #root {
     --button-size: min(8.333vw, 40px);
-    --musical-range-slider-width: calc(12 * var(--button-size));
+    --musical-range-slider-width: calc(12 * var(--button-size) - 16px);
 }
 
 @media (max-width: 768px) {
@@ -22,15 +22,54 @@ body {
     gap: 10px;
 }
 
+.title {
+    color: white;
+    font-family: Roboto, sans-serif;
+    font-size: 30px;
+}
+
 .large-label {
     color: white;
     font-family: Roboto, sans-serif;
     font-size: large;
 }
 
+.top-settings {
+    display: grid;
+    grid-template-rows: auto auto;
+    grid-template-columns: auto 1fr auto;
+    width: var(--musical-range-slider-width);
+}
+
+.volume-label {
+    text-align: left;
+    grid-row-start: 1;
+    grid-column-start: 1;
+}
+
+.volume-bar {
+    grid-row-start: 2;
+    grid-column-start: 1;
+}
+
+.prefer-sharp-picker {
+    grid-row-start: 2;
+    grid-column-start: 3;
+    align-self: center;
+}
+
 .range-section {
     display: grid;
     grid-template-rows: 2;
+}
+
+.range-label {
+    grid-row-start: 1;
+    text-align: left;
+}
+
+.range-slider {
+    grid-row-start: 2;
 }
 
 .chord-button {
@@ -63,4 +102,8 @@ button:active {
 
 button.MuiButtonBase-root {
     padding: 5px 10px;
+}
+
+svg {
+    color: white;
 }

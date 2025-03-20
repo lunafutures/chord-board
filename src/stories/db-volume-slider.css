@@ -1,3 +1,4 @@
 .db-volume-slider-container {
+    padding-top: 5px;
     min-width: var(--db-volume-slider-width, 200px);
 }

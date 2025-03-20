@@ -7,6 +7,8 @@ import { PolySynth, Synth, SynthOptions, now as toneNow } from 'tone';
 import { MusicalRangeMidiMaxDefault, MusicalRangeMidiMinDefault, MusicalRangeSlider } from './stories/RangeSlider';
 import { resumeAudioContext } from './toneManager';
 import { createTheme, ThemeProvider } from '@mui/material';
+import { DbVolumeSlider } from './stories/DbVolumeSlider';
+import { PreferSharpPicker } from './stories/PreferSharpPicker';
 
 const INACTIVITY_THRESHOLD = 5 * 60 * 1000;
 
@@ -37,11 +39,27 @@ function App(): JSX.Element {
         <ThemeProvider theme={darkTheme}>
             <InactivityChecker threshold={INACTIVITY_THRESHOLD} />
             <div className="App">
+                <div className="title">
+                    Chord Board
+                </div>
+                <div className="top-settings">
+                    <span className="large-label volume-label">
+                        Volume:
+                    </span>
+                    <div className="volume-bar">
+                        <DbVolumeSlider onVolumeChanged={(volume) => {
+                            synth.volume.value = volume;
+                        }}/>
+                    </div>
+                    <div className="prefer-sharp-picker">
+                        <PreferSharpPicker onPreferSharpChanged={setPreferSharp}/>
+                    </div>
+                </div>
                 <div className="range-section">
-                    <span className="large-label" style={{ gridRowStart: 1, textAlign: 'left' }}>
+                    <span className="large-label range-label">
                         Play chord notes between:
                     </span>
-                    <div style={{ gridRowStart: 2 }}>
+                    <div className="range-slider">
                         <MusicalRangeSlider
                             midiMin={MusicalRangeMidiMinDefault}
                             midiMax={MusicalRangeMidiMaxDefault}
@@ -155,7 +173,7 @@ function ChordButton(props: {
         console.log(`Limiting to notes between ${noteStr(settings.rangeLow)} and ${noteStr(settings.rangeHigh)}`);
         console.log(`Playing notes: ${notes}`);
         // TODO: Handle time differently if in mobile or desktop
-        settings.synth.volume.value = -6;
+        // settings.synth.volume.value = -6;
         settings.synth.releaseAll();
         settings.synth.triggerAttack(notes);
     }
