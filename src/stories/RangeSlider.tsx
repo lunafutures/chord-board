@@ -51,6 +51,11 @@ export function MusicalRangeSlider({
     const [values, setValues] = React.useState(initialValues);
     const [thumbsToMove, setThumbsToMove] = React.useState(ThumbsToMoveDefault);
 
+    function changeValues(first: number, second: number): void {
+        setValues([first, second]);
+        onValuesChanged(first, second);
+    }
+
     return (
         <div className="range-slider-container">
             <Slider
@@ -78,11 +83,9 @@ export function MusicalRangeSlider({
                             const newFirst = oldFirst + coercedDelta;
                             const newSecond = oldSecond + coercedDelta;
 
-                            setValues([newFirst, newSecond]);
-                            onValuesChanged(newFirst, newSecond);
+                            changeValues(newFirst, newSecond);
                         } else {
-                            setValues([first, second]);
-                            onValuesChanged(first, second);
+                            changeValues(first, second);
                         }
                     }
                 }}
@@ -106,7 +109,7 @@ export function MusicalRangeSlider({
 
                 <Button variant="outlined" onClick={() => {
                     setThumbsToMove(ThumbsToMoveDefault);
-                    setValues(initialValues);
+                    changeValues(initialValues[0], initialValues[1]);
                 }}> Reset </Button>
             </div>
         </div>
