@@ -3,7 +3,7 @@ import { MusicalRangeMidiMaxDefault, MusicalRangeMidiMinDefault, MusicalRangeSli
 import { C3_midi, C5_midi } from "../midi";
 
 const meta = {
-    title: 'Example/Musical Range Slider',
+    title: 'Musical Range Slider',
     component: MusicalRangeSlider,
     parameters: {
         layout: 'centered',

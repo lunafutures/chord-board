@@ -2,7 +2,7 @@ import { Meta, StoryObj } from "@storybook/react";
 import { DB_DEFAULT_MIN_VOLUME, DbVolumeSlider } from "./DbVolumeSlider";
 
 const meta = {
-    title: 'Example/Db Volume Slider',
+    title: 'Db Volume Slider',
     component: DbVolumeSlider,
     parameters: {
         layout: 'centered',
