@@ -37,13 +37,15 @@ type MySynth = PolySynth<Synth<SynthOptions>>;
 function App(): JSX.Element {
     const [range, setRange] = useLocalStorage('range', MusicalRangeDefault);
     const [thumbsToMove, setThumbsToMove] = useLocalStorage('thumbs', ThumbsToMoveDefault);
-    const synth: MySynth = React.useMemo(() => new PolySynth({maxPolyphony: 100}).toDestination(), []);
     const [preferSharp, setPreferSharp] = useLocalStorage('prefer-sharp', false);
     const [volume, setVolume] = useLocalStorage('volume', INITIAL_VOLUME);
+    const [rainbowMode, updateRainbowMode] = useLocalStorage<boolean>('rainbow-mode', false);
+
+    const synth: MySynth = React.useMemo(() => new PolySynth({maxPolyphony: 100}).toDestination(), []);
     const mobileDetect = React.useMemo(() => new MobileDetect(window.navigator.userAgent), []);
+
     const [currentChord, updateCurrentChord] = React.useState<string | null>(null);
     const [currentHue, updateCurrentHue] = React.useState<number>(0);
-    const [rainbowMode, updateRainbowMode] = useLocalStorage<boolean>('rainbow-mode', false);
 
     React.useEffect(() => {
         console.log(`Setting volume to ${volume} dB.`);
