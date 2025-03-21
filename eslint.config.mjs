@@ -1,20 +1,21 @@
-import pluginJs from "@eslint/js";
-import tseslint from "typescript-eslint";
-import pluginReact from "eslint-plugin-react";
+import pluginJs from '@eslint/js';
+import tseslint from 'typescript-eslint';
+import pluginReact from 'eslint-plugin-react';
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
     {
-        files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"],
+        files: ['**/*.{js,mjs,cjs,ts,jsx,tsx}'],
         settings: {
             react: {
                 version: 'detect',
             }
         },
         rules: {
-            semi: [2, "always"],
-            eqeqeq: ["error", "always"],
-            "@typescript-eslint/explicit-function-return-type": "error",
+            semi: [2, 'always'],
+            eqeqeq: ['error', 'always'],
+            quotes: ['error', 'single'],
+            '@typescript-eslint/explicit-function-return-type': 'error',
         },
     },
     pluginJs.configs.recommended,

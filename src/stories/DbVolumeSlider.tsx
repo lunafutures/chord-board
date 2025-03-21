@@ -1,6 +1,6 @@
 import './db-volume-slider.css';
-import { Stack, Slider } from "@mui/material";
-import React, { JSX } from "react";
+import { Stack, Slider } from '@mui/material';
+import React, { JSX } from 'react';
 
 import VolumeDown from '@mui/icons-material/VolumeDown';
 import VolumeUp from '@mui/icons-material/VolumeUp';

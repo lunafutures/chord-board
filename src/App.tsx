@@ -109,12 +109,12 @@ function App(): JSX.Element {
                 <div>
                     <span
                         className={
-                            "chord-name "
-                            + ((currentChord === null) ? "nothing-playing" :
-                                (rainbowMode ? 'chord-name-colorful' : ""))}
-                        style={{ "--current-chord-hue": currentHue } as React.CSSProperties}
+                            'chord-name '
+                            + ((currentChord === null) ? 'nothing-playing' :
+                                (rainbowMode ? 'chord-name-colorful' : ''))}
+                        style={{ '--current-chord-hue': currentHue } as React.CSSProperties}
                     >
-                        {(currentChord === null) ? "Nothing played yet." : currentChord}
+                        {(currentChord === null) ? 'Nothing played yet.' : currentChord}
                     </span>
                 </div>
                 <ChordSettingsContext.Provider
@@ -155,7 +155,7 @@ function Chords(props: {sameRootRunsDown: boolean}): JSX.Element {
         });
     });
     
-    return <div className="chord-grid" style={{display: "grid"}}>
+    return <div className="chord-grid" style={{display: 'grid'}}>
         {buttons}
     </div>;
 }
@@ -197,7 +197,7 @@ function ChordButton(props: {
                 timeoutPromise,
             ]);
         } catch (error) {
-            console.error("Audio initialization failed:", error);
+            console.error('Audio initialization failed:', error);
             console.log('Reloading page...');
             window.location.reload();
         }
@@ -225,7 +225,7 @@ function ChordButton(props: {
         if (releaseIsPending.current) {
             releaseNotes();
             releaseIsPending.current = false;
-            console.log("Release of notes was still pending.");
+            console.log('Release of notes was still pending.');
         }
     }
 
@@ -243,7 +243,7 @@ function ChordButton(props: {
     return (
         <button
             key={abbrChordName}
-            className={"chord-button " + (settings.rainbowMode ? 'chord-button-colorful' : '')}
+            className={'chord-button ' + (settings.rainbowMode ? 'chord-button-colorful' : '')}
             onMouseDown={mouseDown}
             onMouseUp={mouseUp}
             style={{

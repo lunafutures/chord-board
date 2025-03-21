@@ -1,5 +1,5 @@
-import { Meta, StoryObj } from "@storybook/react";
-import { PreferSharpPicker } from "./PreferSharpPicker";
+import { Meta, StoryObj } from '@storybook/react';
+import { PreferSharpPicker } from './PreferSharpPicker';
 
 const meta = {
     title: 'Prefer Sharp Picker',

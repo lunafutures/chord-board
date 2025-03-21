@@ -1,6 +1,6 @@
-import { Meta, StoryObj } from "@storybook/react";
-import { MusicalRangeMidiMaxDefault, MusicalRangeMidiMinDefault, MusicalRangeSlider } from "./RangeSlider";
-import { C3_midi, C5_midi } from "../midi";
+import { Meta, StoryObj } from '@storybook/react';
+import { MusicalRangeMidiMaxDefault, MusicalRangeMidiMinDefault, MusicalRangeSlider } from './RangeSlider';
+import { C3_midi, C5_midi } from '../midi';
 
 const meta = {
     title: 'Musical Range Slider',
@@ -20,7 +20,7 @@ export const Slider: Story = {
     args: {
         midiMin: MusicalRangeMidiMinDefault,
         midiMax: MusicalRangeMidiMaxDefault,
-        ariaLabel: "Musical Slider",
+        ariaLabel: 'Musical Slider',
         initialValues: [C3_midi, C5_midi],
         preferSharp: true,
         stylized: true,

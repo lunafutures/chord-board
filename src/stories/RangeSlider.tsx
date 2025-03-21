@@ -28,8 +28,8 @@ export const MusicalRangeMidiMaxDefault = C8_midi;
 export const MusicalRangeDefault = [C3_midi, C5_midi];
 
 enum ThumbsToMove {
-    One = "one",
-    Both = "both",
+    One = 'one',
+    Both = 'both',
 }
 
 export const ThumbsToMoveDefault = ThumbsToMove.Both;
@@ -51,7 +51,7 @@ export function MusicalRangeSlider({
     showMidiValues,
     onThumbsChanged,
     onValuesChanged,
-    ariaLabel = "Musical Range Slider",
+    ariaLabel = 'Musical Range Slider',
 }: MusicalRangeSliderProps): JSX.Element {
     const [values, setValues] = React.useState(initialValues);
     const [thumbsToMove, setThumbsToMove] = React.useState(initialThumbsToMove);

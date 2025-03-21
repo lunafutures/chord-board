@@ -1,5 +1,5 @@
-import { Meta, StoryObj } from "@storybook/react";
-import { DB_DEFAULT_MIN_VOLUME, DbVolumeSlider } from "./DbVolumeSlider";
+import { Meta, StoryObj } from '@storybook/react';
+import { DB_DEFAULT_MIN_VOLUME, DbVolumeSlider } from './DbVolumeSlider';
 
 const meta = {
     title: 'Db Volume Slider',

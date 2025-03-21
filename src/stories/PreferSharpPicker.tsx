@@ -1,5 +1,5 @@
-import { ToggleButton, ToggleButtonGroup } from "@mui/material";
-import React, { JSX } from "react";
+import { ToggleButton, ToggleButtonGroup } from '@mui/material';
+import React, { JSX } from 'react';
 
 export interface PreferSharpPickerProps {
     initial?: boolean;

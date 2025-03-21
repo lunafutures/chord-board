@@ -1,5 +1,5 @@
-import { map } from "lodash";
-import React, { JSX } from "react";
+import { map } from 'lodash';
+import React, { JSX } from 'react';
 
 export function InactivityChecker(props: { thresholdMillis: number }): JSX.Element {
     return <>
@@ -89,7 +89,7 @@ function UserInactivityChecker(props: { thresholdMillis: number }): JSX.Element 
 
     React.useEffect(() => {
         if (inactivity === InactivityState.WasInactive) {
-            console.log("User returning after inactivity, reloading.");
+            console.log('User returning after inactivity, reloading.');
             window.location.reload();
         }
     }, [inactivity]);
