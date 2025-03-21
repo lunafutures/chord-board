@@ -3,14 +3,8 @@ body {
 }
 
 #root {
-    --button-size: min(8.333vw, 40px);
+    --button-size: min(calc(100vw / 12), 40px);
     --musical-range-slider-width: calc(12 * var(--button-size) - 16px);
-}
-
-@media (max-width: 768px) {
-    /* Mobile */
-}
-@media (min-width: 769px) {
 }
 
 .App {
