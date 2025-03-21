@@ -16,7 +16,7 @@ export function PreferSharpPicker({
 
     React.useEffect(() => {
         onPreferSharpChanged(preferSharp);
-    }, [preferSharp]);
+    }, [preferSharp, onPreferSharpChanged]);
 
     return (
         <ToggleButtonGroup

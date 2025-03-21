@@ -73,12 +73,16 @@ function App(): JSX.Element {
                         Volume:
                     </span>
                     <div className="volume-bar">
-                        <DbVolumeSlider initial={volume} onVolumeChanged={(volume) => {
-                            setVolume(volume);
-                        }}/>
+                        <DbVolumeSlider
+                            initial={volume}
+                            onVolumeChanged={React.useCallback(setVolume, [setVolume])}
+                            />
                     </div>
                     <div className="prefer-sharp-picker">
-                        <PreferSharpPicker initial={preferSharp} onPreferSharpChanged={setPreferSharp}/>
+                        <PreferSharpPicker
+                            initial={preferSharp}
+                            onPreferSharpChanged={React.useCallback(setPreferSharp, [setPreferSharp])}
+                            />
                     </div>
                 </div>
                 <div className="range-section">
@@ -96,8 +100,8 @@ function App(): JSX.Element {
                             valueLabelDisplay={'on'}
                             color={'primary'}
                             showMidiValues={true}
-                            onThumbsChanged={(thumbs) => setThumbsToMove(thumbs)}
-                            onValuesChanged={(rangeStart, rangeEnd) => setRange([rangeStart, rangeEnd])}
+                            onThumbsChanged={React.useCallback(setThumbsToMove, [setThumbsToMove])}
+                            onValuesChanged={React.useCallback((rangeStart, rangeEnd) => setRange([rangeStart, rangeEnd]), [setRange])}
                             ariaLabel='Note Range Picker'
                         />
                     </div>

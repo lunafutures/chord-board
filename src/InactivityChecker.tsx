@@ -1,3 +1,4 @@
+import { map } from "lodash";
 import React, { JSX } from "react";
 
 export function InactivityChecker(props: { thresholdMillis: number }): JSX.Element {
@@ -48,26 +49,7 @@ function UserInactivityChecker(props: { thresholdMillis: number }): JSX.Element 
     const [inactivity, setInactivity] = React.useState(InactivityState.NeverInactive);
     const timerHandle = React.useRef<NodeJS.Timeout | null>(null);
 
-    resetupInactivityTimer();
-    React.useEffect(() => {
-        activityEvents.map((eventName) => {
-            window.addEventListener(eventName, markActive);
-        });
-
-        return (): void => {
-            activityEvents.map((eventName) => {
-                window.removeEventListener(eventName, markActive);
-            });
-        };
-    }, [activityEvents]);
-    React.useEffect(() => {
-        if (inactivity === InactivityState.WasInactive) {
-            console.log("User returning after inactivity, reloading.");
-            window.location.reload();
-        }
-    }, [inactivity]);
-
-    function resetupInactivityTimer(): void {
+    const resetupInactivityTimer = React.useCallback(() => {
         if (timerHandle.current !== null) {
             clearInterval(timerHandle.current);
         }
@@ -75,9 +57,10 @@ function UserInactivityChecker(props: { thresholdMillis: number }): JSX.Element 
             console.log(`User is inactive at ${new Date(Date.now())}`);
             setInactivity(InactivityState.CurrentlyInactive);
         }, props.thresholdMillis);
-    }
+    }, [props.thresholdMillis]);
 
-    function markActive(): void {
+
+    const markActive = React.useCallback(() => {
         setInactivity((old) => {
             switch (old) {
                 case InactivityState.NeverInactive:
@@ -90,7 +73,28 @@ function UserInactivityChecker(props: { thresholdMillis: number }): JSX.Element 
             }
         });
         resetupInactivityTimer();
-    }
+    }, [resetupInactivityTimer]);
+
+    React.useEffect(() => {
+        map(activityEvents, (eventName) => {
+            window.addEventListener(eventName, markActive);
+        });
+
+        return (): void => {
+            map(activityEvents, (eventName) => {
+                window.removeEventListener(eventName, markActive);
+            });
+        };
+    }, [markActive]);
+
+    React.useEffect(() => {
+        if (inactivity === InactivityState.WasInactive) {
+            console.log("User returning after inactivity, reloading.");
+            window.location.reload();
+        }
+    }, [inactivity]);
+
+    resetupInactivityTimer();
 
     return <></>;
 }

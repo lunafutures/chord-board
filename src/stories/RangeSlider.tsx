@@ -58,10 +58,10 @@ export function MusicalRangeSlider({
 
     React.useEffect(() => {
         onValuesChanged(values[0], values[1]);
-    }, [values]);
+    }, [values, onValuesChanged]);
     React.useEffect(() => {
         onThumbsChanged(thumbsToMove);
-    }, [thumbsToMove]);
+    }, [thumbsToMove, onThumbsChanged]);
 
     return (
         <div className="range-slider-container">

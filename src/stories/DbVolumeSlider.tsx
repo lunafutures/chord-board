@@ -26,7 +26,7 @@ export function DbVolumeSlider({
 
     React.useEffect(() => {
         onVolumeChanged(value);
-    }, [value]);
+    }, [value, onVolumeChanged]);
 
     return (
         <Stack
