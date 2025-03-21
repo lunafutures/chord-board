@@ -85,6 +85,13 @@ body {
     width: var(--button-size);
 }
 
+.chord-button-colorful {
+    --button-color: hsl(var(--button-hue), 35%, 60%) ;
+    background-color: transparent;
+    color: var(--button-color);
+    border-color: var(--button-color);
+}
+
 .button-text {
     display: inline-block;
     line-height: 97%;

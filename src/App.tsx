@@ -102,7 +102,7 @@ function App(): JSX.Element {
                         mobileDetect,
                         updateCurrentChord,
                     }}>
-                    <Chords sameRootRunsDown={true} />
+                        <Chords sameRootRunsDown={true} />
                 </ChordSettingsContext.Provider>
             </div>
         </ThemeProvider>
@@ -112,6 +112,7 @@ function App(): JSX.Element {
 function Chords(props: {sameRootRunsDown: boolean}): JSX.Element {
     const buttons: JSX.Element[] = [];
     _.range(0, 12).map((rootMidiValue, i) => {
+        const hue = i * 30;
         return chords.map((chord, j) => {
             return buttons.push(
                 <ChordButton
@@ -120,7 +121,9 @@ function Chords(props: {sameRootRunsDown: boolean}): JSX.Element {
                     chord={chord}
                     column={props.sameRootRunsDown ? i + 1 : j + 1}
                     row={props.sameRootRunsDown ? j + 1 : i + 1}
-                    />);
+                    hue={hue}
+                    />
+            );
         });
     });
     
@@ -135,6 +138,7 @@ function ChordButton(props: {
     chord: Chord,
     column: number,
     row: number,
+    hue: number,
 }): JSX.Element {
     const midiNote = new MidiNote(props.rootMidiValue);
     const settings = React.useContext(ChordSettingsContext);
@@ -217,7 +221,8 @@ function ChordButton(props: {
             style={{
                 gridColumnStart: props.column,
                 gridRowStart: props.row,
-            }}>
+                '--button-hue': props.hue,
+            } as React.CSSProperties}>
             <span className='button-text'>
                 {abbrChordName}
             </span>
