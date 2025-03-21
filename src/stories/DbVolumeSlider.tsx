@@ -13,8 +13,8 @@ export interface DbVolumeSliderProps {
 }
 
 export const DB_DEFAULT_MIN_VOLUME = -40;
-export const DB_DEFAULT_MAX_VOLUME = 20;
-export const DB_DEFAULT_VOLUME = -6;
+export const DB_DEFAULT_MAX_VOLUME = 0;
+export const DB_DEFAULT_VOLUME = -12;
 
 export function DbVolumeSlider({
     min = DB_DEFAULT_MIN_VOLUME,

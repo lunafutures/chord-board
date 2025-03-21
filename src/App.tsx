@@ -7,10 +7,11 @@ import { PolySynth, Synth, SynthOptions, now as toneNow } from 'tone';
 import { MusicalRangeMidiMaxDefault, MusicalRangeMidiMinDefault, MusicalRangeSlider } from './stories/RangeSlider';
 import { resumeAudioContext } from './toneManager';
 import { createTheme, ThemeProvider } from '@mui/material';
-import { DbVolumeSlider } from './stories/DbVolumeSlider';
+import { DB_DEFAULT_VOLUME, DbVolumeSlider } from './stories/DbVolumeSlider';
 import { PreferSharpPicker } from './stories/PreferSharpPicker';
 
 const INACTIVITY_THRESHOLD = 5 * 60 * 1000;
+const INITIAL_VOLUME = DB_DEFAULT_VOLUME;
 
 const darkTheme = createTheme({
     palette: {
@@ -34,6 +35,12 @@ function App(): JSX.Element {
     const synth: MySynth = React.useMemo(() => new PolySynth({maxPolyphony: 100}).toDestination(), []);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [preferSharp, setPreferSharp] = React.useState(false);
+    const [volume, setVolume] = React.useState(INITIAL_VOLUME);
+
+    React.useEffect(() => {
+        console.log(`Setting volume to ${volume} dB.`);
+        synth.volume.value = volume;
+    }, [volume]);
 
     return (
         <ThemeProvider theme={darkTheme}>
@@ -47,8 +54,8 @@ function App(): JSX.Element {
                         Volume:
                     </span>
                     <div className="volume-bar">
-                        <DbVolumeSlider onVolumeChanged={(volume) => {
-                            synth.volume.value = volume;
+                        <DbVolumeSlider initial={INITIAL_VOLUME} onVolumeChanged={(volume) => {
+                            setVolume(volume);
                         }}/>
                     </div>
                     <div className="prefer-sharp-picker">
@@ -173,7 +180,6 @@ function ChordButton(props: {
         console.log(`Limiting to notes between ${noteStr(settings.rangeLow)} and ${noteStr(settings.rangeHigh)}`);
         console.log(`Playing notes: ${notes}`);
         // TODO: Handle time differently if in mobile or desktop
-        // settings.synth.volume.value = -6;
         settings.synth.releaseAll();
         settings.synth.triggerAttack(notes);
     }
