@@ -16,6 +16,7 @@ export function PreferSharpPicker({
     return (
         <ToggleButtonGroup
             value={preferSharp}
+            color={'primary'}
             exclusive
             onChange={(_event, newValue: boolean | null) => {
                 // Don't allow no value.
