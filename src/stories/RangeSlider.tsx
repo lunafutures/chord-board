@@ -98,7 +98,8 @@ export function MusicalRangeSlider({
                     color={color}
                     value={thumbsToMove}
                     exclusive
-                    onChange={(_event, newValue: ThumbsToMove) => {
+                    onChange={(_event, newValue: ThumbsToMove | null) => {
+                        if (newValue == null) return;
                         setThumbsToMove(newValue);
                     }}
                     aria-label="Platform"
