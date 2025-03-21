@@ -7,6 +7,7 @@ body {
     --musical-range-slider-width: calc(12 * var(--button-size) - 16px);
     --default-saturation: 35%;
     --default-lightness: 60%;
+    --default-font-family: "Roboto", "Helvetica", "Arial", sans-serif;
 }
 
 .App {
@@ -27,7 +28,7 @@ body {
 
 .title {
     color: white;
-    font-family: Roboto, sans-serif;
+    font-family: var(--default-font-family);
     font-size: 30px;
 
     grid-column-start: start;
@@ -51,13 +52,13 @@ body {
 
 .large-label {
     color: white;
-    font-family: Roboto, sans-serif;
+    font-family: var(--default-font-family);
     font-size: large;
 }
 
 .chord-name {
     color: white;
-    font-family: Roboto, sans-serif;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     font-size: 25px;
 
     /* Setting this to anything prevents the flat symbol from lowering the text. */
@@ -140,7 +141,7 @@ button {
     border: 1px solid #444;
     border-radius: 5px;
     cursor: pointer;
-    font-family: Roboto, sans-serif;
+    font-family: var(--default-font-family);
 }
 
 button:hover {
