@@ -38,7 +38,13 @@ body {
     grid-column-end: end;
     grid-row-start: 1;
     font-size: 10px;
-    background-color: transparent;
+
+    background-color: var(--rainbow-bg, transparent);
+}
+
+.rainbow-mode-on {
+    color: #90caf9;
+    --rainbow-bg: rgba(144, 202, 249, 0.16);
 }
 
 .large-label {

@@ -26,6 +26,7 @@ interface ChordSettings {
     rangeHigh: number;
     preferSharp: boolean;
     mobileDetect: MobileDetect;
+    rainbowMode: boolean;
     updateCurrentChord: (chord: string) => void;
 }
 
@@ -41,6 +42,7 @@ function App(): JSX.Element {
     const [volume, setVolume] = React.useState(INITIAL_VOLUME);
     const mobileDetect = React.useMemo(() => new MobileDetect(window.navigator.userAgent), []);
     const [currentChord, updateCurrentChord] = React.useState<string | null>(null);
+    const [rainbowMode, updateRainbowMode] = React.useState(false);
 
     React.useEffect(() => {
         console.log(`Setting volume to ${volume} dB.`);
@@ -55,7 +57,10 @@ function App(): JSX.Element {
                     <div className="title">
                         Chord Board
                     </div>
-                    <button className='rainbow-button'>
+                    <button
+                        className={'rainbow-button ' + (rainbowMode ? 'rainbow-mode-on' : '')}
+                        onClick={() => updateRainbowMode(prev => !prev)}
+                        >
                         <div>Rainbow</div>
                         <div>Mode</div>
                     </button>
@@ -106,6 +111,7 @@ function App(): JSX.Element {
                         rangeHigh: range[1],
                         preferSharp,
                         mobileDetect,
+                        rainbowMode,
                         updateCurrentChord,
                     }}>
                         <Chords sameRootRunsDown={true} />
@@ -221,7 +227,7 @@ function ChordButton(props: {
     return (
         <button
             key={abbrChordName}
-            className="chord-button"
+            className={"chord-button " + (settings.rainbowMode ? 'chord-button-colorful' : '')}
             onMouseDown={mouseDown}
             onMouseUp={mouseUp}
             style={{
