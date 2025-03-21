@@ -3,9 +3,8 @@ import './App.css';
 import { C3_midi, C5_midi, MidiNote } from './midi';
 import { Chord, chords } from './chords';
 import _ from 'lodash';
-import { PolySynth, Synth, SynthOptions, now as toneNow } from 'tone';
+import { PolySynth, start, Synth, SynthOptions, now as toneNow } from 'tone';
 import { MusicalRangeMidiMaxDefault, MusicalRangeMidiMinDefault, MusicalRangeSlider } from './stories/RangeSlider';
-import { resumeAudioContext } from './toneManager';
 import { createTheme, ThemeProvider } from '@mui/material';
 import { DB_DEFAULT_VOLUME, DbVolumeSlider } from './stories/DbVolumeSlider';
 import { PreferSharpPicker } from './stories/PreferSharpPicker';
@@ -168,6 +167,23 @@ function ChordButton(props: {
     }
 
     async function mouseDown(): Promise<void> {
+        /* First check if we can actually play a sound or not.
+         * For some reason, sometimes Tone.start() will actually NEVER resolve and
+         * no sound can be played. In that case, refresh the page. */ 
+        try {
+            const timeoutPromise = new Promise((resolve, reject) =>
+                setTimeout(() => reject(new Error('Audio startup timeout')), 500));
+
+            await Promise.race([
+                start(),
+                timeoutPromise,
+            ]);
+        } catch (error) {
+            console.error("Audio initialization failed:", error);
+            console.log('Reloading page...');
+            window.location.reload();
+        }
+
         const notes = _
             .flatMap(midiNote.withChord(props.chord), (value: number) => {
                 return allOctaveSet.map(o => value + o);
@@ -176,7 +192,6 @@ function ChordButton(props: {
             .filter((value) => settings.rangeLow <= value && value < settings.rangeHigh)
             .map(value => noteStr(value));
 
-        await resumeAudioContext();
         console.log(`Limiting to notes between ${noteStr(settings.rangeLow)} and ${noteStr(settings.rangeHigh)}`);
         console.log(`Playing notes: ${notes}`);
         // TODO: Handle time differently if in mobile or desktop
