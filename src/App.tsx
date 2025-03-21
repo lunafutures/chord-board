@@ -10,6 +10,7 @@ import { DB_DEFAULT_VOLUME, DbVolumeSlider } from './stories/DbVolumeSlider';
 import { PreferSharpPicker } from './stories/PreferSharpPicker';
 import { InactivityChecker } from './InactivityChecker';
 import MobileDetect from 'mobile-detect';
+import { useLocalStorage } from 'usehooks-ts';
 
 const INACTIVITY_THRESHOLD = 5 * 60 * 1000;
 const INITIAL_VOLUME = DB_DEFAULT_VOLUME;
@@ -34,16 +35,14 @@ const ChordSettingsContext = React.createContext<ChordSettings>(null as unknown 
 
 type MySynth = PolySynth<Synth<SynthOptions>>;
 function App(): JSX.Element {
-    const initialRange: [number, number] = [C3_midi, C5_midi];
-    const [range, setRange] = React.useState(initialRange);
+    const [range, setRange] = useLocalStorage('range', [C3_midi, C5_midi]);
     const synth: MySynth = React.useMemo(() => new PolySynth({maxPolyphony: 100}).toDestination(), []);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [preferSharp, setPreferSharp] = React.useState(false);
-    const [volume, setVolume] = React.useState(INITIAL_VOLUME);
+    const [preferSharp, setPreferSharp] = useLocalStorage('prefer-sharp', false);
+    const [volume, setVolume] = useLocalStorage('volume', INITIAL_VOLUME);
     const mobileDetect = React.useMemo(() => new MobileDetect(window.navigator.userAgent), []);
     const [currentChord, updateCurrentChord] = React.useState<string | null>(null);
     const [currentHue, updateCurrentHue] = React.useState<number>(0);
-    const [rainbowMode, updateRainbowMode] = React.useState(false);
+    const [rainbowMode, updateRainbowMode] = useLocalStorage<boolean>('rainbow-mode', false);
 
     React.useEffect(() => {
         console.log(`Setting volume to ${volume} dB.`);
@@ -71,12 +70,12 @@ function App(): JSX.Element {
                         Volume:
                     </span>
                     <div className="volume-bar">
-                        <DbVolumeSlider initial={INITIAL_VOLUME} onVolumeChanged={(volume) => {
+                        <DbVolumeSlider initial={volume} onVolumeChanged={(volume) => {
                             setVolume(volume);
                         }}/>
                     </div>
                     <div className="prefer-sharp-picker">
-                        <PreferSharpPicker onPreferSharpChanged={setPreferSharp}/>
+                        <PreferSharpPicker initial={preferSharp} onPreferSharpChanged={setPreferSharp}/>
                     </div>
                 </div>
                 <div className="range-section">
@@ -87,7 +86,7 @@ function App(): JSX.Element {
                         <MusicalRangeSlider
                             midiMin={MusicalRangeMidiMinDefault}
                             midiMax={MusicalRangeMidiMaxDefault}
-                            initialValues={initialRange}
+                            initialValues={range as [number, number]}
                             preferSharp={preferSharp}
                             stylized={true}
                             valueLabelDisplay={'on'}
