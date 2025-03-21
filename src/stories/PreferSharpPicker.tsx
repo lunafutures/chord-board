@@ -17,7 +17,10 @@ export function PreferSharpPicker({
         <ToggleButtonGroup
             value={preferSharp}
             exclusive
-            onChange={(_event, newValue: boolean) => {
+            onChange={(_event, newValue: boolean | null) => {
+                // Don't allow no value.
+                if (newValue === null) return;
+
                 setPreferSharp(newValue);
                 onPreferSharpChanged(newValue);
             }}
