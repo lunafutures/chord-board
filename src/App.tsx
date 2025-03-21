@@ -39,7 +39,7 @@ function App(): JSX.Element {
     React.useEffect(() => {
         console.log(`Setting volume to ${volume} dB.`);
         synth.volume.value = volume;
-    }, [volume]);
+    }, [synth.volume, volume]);
 
     return (
         <ThemeProvider theme={darkTheme}>
