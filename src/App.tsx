@@ -51,8 +51,14 @@ function App(): JSX.Element {
         <ThemeProvider theme={darkTheme}>
             <InactivityChecker thresholdMillis={INACTIVITY_THRESHOLD} />
             <div className="App">
-                <div className="title">
-                    Chord Board
+                <div className="title-bar">
+                    <div className="title">
+                        Chord Board
+                    </div>
+                    <button className='rainbow-button'>
+                        <div>Rainbow</div>
+                        <div>Mode</div>
+                    </button>
                 </div>
                 <div className="top-settings">
                     <span className="large-label volume-label">

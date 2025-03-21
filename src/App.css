@@ -16,10 +16,29 @@ body {
     gap: 10px;
 }
 
+.title-bar {
+    display: grid;
+    grid-template-columns: [start] 1fr [button] auto [end];
+    width: var(--musical-range-slider-width);
+    margin-top: 3px;
+}
+
 .title {
     color: white;
     font-family: Roboto, sans-serif;
     font-size: 30px;
+
+    grid-column-start: start;
+    grid-column-end: end;
+    grid-row-start: 1;
+}
+
+.rainbow-button {
+    grid-column-start: button;
+    grid-column-end: end;
+    grid-row-start: 1;
+    font-size: 10px;
+    background-color: transparent;
 }
 
 .large-label {
