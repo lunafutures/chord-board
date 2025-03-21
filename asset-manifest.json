@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/static/css/main.fb99e183.css",
-    "main.js": "/static/js/main.6fdf049b.js",
-    "static/js/453.2384e0d8.chunk.js": "/static/js/453.2384e0d8.chunk.js",
-    "index.html": "/index.html",
-    "main.fb99e183.css.map": "/static/css/main.fb99e183.css.map",
-    "main.6fdf049b.js.map": "/static/js/main.6fdf049b.js.map",
-    "453.2384e0d8.chunk.js.map": "/static/js/453.2384e0d8.chunk.js.map"
+    "main.css": "/chord-board/static/css/main.fb99e183.css",
+    "main.js": "/chord-board/static/js/main.575c908a.js",
+    "static/js/453.2384e0d8.chunk.js": "/chord-board/static/js/453.2384e0d8.chunk.js",
+    "index.html": "/chord-board/index.html",
+    "main.fb99e183.css.map": "/chord-board/static/css/main.fb99e183.css.map",
+    "main.575c908a.js.map": "/chord-board/static/js/main.575c908a.js.map",
+    "453.2384e0d8.chunk.js.map": "/chord-board/static/js/453.2384e0d8.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.fb99e183.css",
-    "static/js/main.6fdf049b.js"
+    "static/js/main.575c908a.js"
   ]
 }
