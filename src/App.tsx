@@ -9,6 +9,7 @@ import { createTheme, ThemeProvider } from '@mui/material';
 import { DB_DEFAULT_VOLUME, DbVolumeSlider } from './stories/DbVolumeSlider';
 import { PreferSharpPicker } from './stories/PreferSharpPicker';
 import { InactivityChecker } from './InactivityChecker';
+import MobileDetect from 'mobile-detect';
 
 const INACTIVITY_THRESHOLD = 5 * 60 * 1000;
 const INITIAL_VOLUME = DB_DEFAULT_VOLUME;
@@ -24,6 +25,7 @@ interface ChordSettings {
     rangeLow: number;
     rangeHigh: number;
     preferSharp: boolean;
+    mobileDetect: MobileDetect;
 }
 
 const ChordSettingsContext = React.createContext<ChordSettings>(null as unknown as ChordSettings);
@@ -36,6 +38,7 @@ function App(): JSX.Element {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [preferSharp, setPreferSharp] = React.useState(false);
     const [volume, setVolume] = React.useState(INITIAL_VOLUME);
+    const mobileDetect = React.useMemo(() => new MobileDetect(window.navigator.userAgent), []);
 
     React.useEffect(() => {
         console.log(`Setting volume to ${volume} dB.`);
@@ -88,7 +91,8 @@ function App(): JSX.Element {
                         synth,
                         rangeLow: range[0],
                         rangeHigh: range[1],
-                        preferSharp: preferSharp,
+                        preferSharp,
+                        mobileDetect,
                     }}>
                     <Chords sameRootRunsDown={true} />
                 </ChordSettingsContext.Provider>
@@ -168,9 +172,14 @@ function ChordButton(props: {
 
         console.log(`Limiting to notes between ${noteStr(settings.rangeLow)} and ${noteStr(settings.rangeHigh)}`);
         console.log(`Playing notes: ${notes}`);
-        // TODO: Handle time differently if in mobile or desktop
         settings.synth.releaseAll();
-        settings.synth.triggerAttack(notes);
+
+        if (settings.mobileDetect.mobile()) {
+            // On mobile, we don't expect the user to hold the note.
+            settings.synth.triggerAttackRelease(notes, '2n');
+        } else {
+            settings.synth.triggerAttack(notes);
+        }
 
         if (releaseIsPending.current) {
             releaseNotes();
@@ -180,6 +189,8 @@ function ChordButton(props: {
     }
 
     function mouseUp(): void {
+        if (settings.mobileDetect.mobile()) return;
+
         releaseNotes();
         releaseIsPending.current = true;
     }
