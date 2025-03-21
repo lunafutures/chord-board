@@ -28,5 +28,6 @@ export const Slider: Story = {
         color: 'primary',
         showMidiValues: true,
         onValuesChanged: () => {},
+        onThumbsChanged: () => {}
     },
 };

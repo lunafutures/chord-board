@@ -2,13 +2,14 @@ import React, { JSX } from 'react';
 
 import './range-slider.css';
 import { Button, Slider, ToggleButton, ToggleButtonGroup } from '@mui/material';
-import { A0_midi, C8_midi, midiToString } from '../midi';
+import { A0_midi, C3_midi, C5_midi, C8_midi, midiToString } from '../midi';
 
 export interface MusicalRangeSliderProps {
     midiMin: number,
     midiMax: number,
     /** Midi values of the initial note values.*/
     initialValues: [number, number],
+    initialThumbsToMove?: ThumbsToMove,
     /** Shows notes as ♯ instead of ♭.*/
     preferSharp: boolean,
     /** Shows a # as a ♯, and b as a ♭.*/
@@ -18,18 +19,20 @@ export interface MusicalRangeSliderProps {
     /** Shows a the midi number of the note after the note in the label, e.g. "C3 (48)".*/
     showMidiValues: boolean,
     ariaLabel: string,
+    onThumbsChanged: (thumbs: ThumbsToMove) => void,
     onValuesChanged: (first: number, last: number) => void,
 }
 
 export const MusicalRangeMidiMinDefault = A0_midi;
 export const MusicalRangeMidiMaxDefault = C8_midi;
+export const MusicalRangeDefault = [C3_midi, C5_midi];
 
 enum ThumbsToMove {
     One = "one",
     Both = "both",
 }
 
-const ThumbsToMoveDefault = ThumbsToMove.Both;
+export const ThumbsToMoveDefault = ThumbsToMove.Both;
 
 function coerce(value: number, min: number, max: number): number {
     return Math.max(min, Math.min(value, max));
@@ -40,21 +43,25 @@ export function MusicalRangeSlider({
     midiMin = MusicalRangeMidiMinDefault,
     midiMax = MusicalRangeMidiMaxDefault,
     initialValues,
+    initialThumbsToMove = ThumbsToMoveDefault,
     preferSharp,
     stylized = true,
     valueLabelDisplay,
     color,
     showMidiValues,
+    onThumbsChanged,
     onValuesChanged,
     ariaLabel = "Musical Range Slider",
 }: MusicalRangeSliderProps): JSX.Element {
     const [values, setValues] = React.useState(initialValues);
-    const [thumbsToMove, setThumbsToMove] = React.useState(ThumbsToMoveDefault);
+    const [thumbsToMove, setThumbsToMove] = React.useState(initialThumbsToMove);
 
-    function changeValues(first: number, second: number): void {
-        setValues([first, second]);
-        onValuesChanged(first, second);
-    }
+    React.useEffect(() => {
+        onValuesChanged(values[0], values[1]);
+    }, [values]);
+    React.useEffect(() => {
+        onThumbsChanged(thumbsToMove);
+    }, [thumbsToMove]);
 
     return (
         <div className="range-slider-container">
@@ -83,9 +90,9 @@ export function MusicalRangeSlider({
                             const newFirst = oldFirst + coercedDelta;
                             const newSecond = oldSecond + coercedDelta;
 
-                            changeValues(newFirst, newSecond);
+                            setValues([newFirst, newSecond]);
                         } else {
-                            changeValues(first, second);
+                            setValues([first, second]);
                         }
                     }
                 }}
@@ -110,7 +117,7 @@ export function MusicalRangeSlider({
 
                 <Button variant="outlined" onClick={() => {
                     setThumbsToMove(ThumbsToMoveDefault);
-                    changeValues(initialValues[0], initialValues[1]);
+                    setValues([MusicalRangeDefault[0], MusicalRangeDefault[1]]);
                 }}> Reset </Button>
             </div>
         </div>

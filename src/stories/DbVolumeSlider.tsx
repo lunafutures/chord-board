@@ -23,6 +23,11 @@ export function DbVolumeSlider({
     onVolumeChanged,
 }: DbVolumeSliderProps): JSX.Element {
     const [value, setValue] = React.useState(initial);
+
+    React.useEffect(() => {
+        onVolumeChanged(value);
+    }, [value]);
+
     return (
         <Stack
             className={'db-volume-slider-container'}
@@ -41,7 +46,6 @@ export function DbVolumeSlider({
                     if (typeof newValue !== 'number') return;
 
                     setValue(newValue);
-                    onVolumeChanged(newValue);
                 }}
                 color={'secondary'}
                 aria-label="Volume"

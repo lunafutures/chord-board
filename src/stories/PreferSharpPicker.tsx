@@ -13,6 +13,11 @@ export function PreferSharpPicker({
     onPreferSharpChanged,
 }: PreferSharpPickerProps): JSX.Element {
     const [preferSharp, setPreferSharp] = React.useState(initial);
+
+    React.useEffect(() => {
+        onPreferSharpChanged(preferSharp);
+    }, [preferSharp]);
+
     return (
         <ToggleButtonGroup
             value={preferSharp}
@@ -23,7 +28,6 @@ export function PreferSharpPicker({
                 if (newValue === null) return;
 
                 setPreferSharp(newValue);
-                onPreferSharpChanged(newValue);
             }}
             aria-label="Platform"
         >

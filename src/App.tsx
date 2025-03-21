@@ -1,10 +1,10 @@
 import React, { JSX } from 'react';
 import './App.css';
-import { C3_midi, C5_midi, MidiNote } from './midi';
+import { MidiNote } from './midi';
 import { Chord, chords } from './chords';
 import _ from 'lodash';
 import { PolySynth, start, Synth, SynthOptions, now as toneNow } from 'tone';
-import { MusicalRangeMidiMaxDefault, MusicalRangeMidiMinDefault, MusicalRangeSlider } from './stories/RangeSlider';
+import { MusicalRangeDefault, MusicalRangeMidiMaxDefault, MusicalRangeMidiMinDefault, MusicalRangeSlider, ThumbsToMoveDefault } from './stories/RangeSlider';
 import { createTheme, ThemeProvider } from '@mui/material';
 import { DB_DEFAULT_VOLUME, DbVolumeSlider } from './stories/DbVolumeSlider';
 import { PreferSharpPicker } from './stories/PreferSharpPicker';
@@ -35,7 +35,8 @@ const ChordSettingsContext = React.createContext<ChordSettings>(null as unknown 
 
 type MySynth = PolySynth<Synth<SynthOptions>>;
 function App(): JSX.Element {
-    const [range, setRange] = useLocalStorage('range', [C3_midi, C5_midi]);
+    const [range, setRange] = useLocalStorage('range', MusicalRangeDefault);
+    const [thumbsToMove, setThumbsToMove] = useLocalStorage('thumbs', ThumbsToMoveDefault);
     const synth: MySynth = React.useMemo(() => new PolySynth({maxPolyphony: 100}).toDestination(), []);
     const [preferSharp, setPreferSharp] = useLocalStorage('prefer-sharp', false);
     const [volume, setVolume] = useLocalStorage('volume', INITIAL_VOLUME);
@@ -87,14 +88,14 @@ function App(): JSX.Element {
                             midiMin={MusicalRangeMidiMinDefault}
                             midiMax={MusicalRangeMidiMaxDefault}
                             initialValues={range as [number, number]}
+                            initialThumbsToMove={thumbsToMove}
                             preferSharp={preferSharp}
                             stylized={true}
                             valueLabelDisplay={'on'}
                             color={'primary'}
                             showMidiValues={true}
-                            onValuesChanged={(rangeStart, rangeEnd) => {
-                                setRange([rangeStart, rangeEnd]);
-                            }}
+                            onThumbsChanged={(thumbs) => setThumbsToMove(thumbs)}
+                            onValuesChanged={(rangeStart, rangeEnd) => setRange([rangeStart, rangeEnd])}
                             ariaLabel='Note Range Picker'
                         />
                     </div>
