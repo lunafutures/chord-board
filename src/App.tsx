@@ -8,6 +8,7 @@ import { MusicalRangeMidiMaxDefault, MusicalRangeMidiMinDefault, MusicalRangeSli
 import { createTheme, ThemeProvider } from '@mui/material';
 import { DB_DEFAULT_VOLUME, DbVolumeSlider } from './stories/DbVolumeSlider';
 import { PreferSharpPicker } from './stories/PreferSharpPicker';
+import { InactivityChecker } from './InactivityChecker';
 
 const INACTIVITY_THRESHOLD = 5 * 60 * 1000;
 const INITIAL_VOLUME = DB_DEFAULT_VOLUME;
@@ -43,7 +44,7 @@ function App(): JSX.Element {
 
     return (
         <ThemeProvider theme={darkTheme}>
-            <InactivityChecker threshold={INACTIVITY_THRESHOLD} />
+            <InactivityChecker thresholdMillis={INACTIVITY_THRESHOLD} />
             <div className="App">
                 <div className="title">
                     Chord Board
@@ -94,36 +95,6 @@ function App(): JSX.Element {
             </div>
         </ThemeProvider>
     );
-}
-
-function InactivityChecker(props: { threshold: number }): JSX.Element {
-    const visibilityChangeTimeRef = React.useRef<number | null>(null);
-
-    React.useEffect(() => {
-        function handleVisibilityChange(): void {
-            if (document.hidden) {
-                console.log(`Document is hidden at ${new Date(Date.now())}`);
-                visibilityChangeTimeRef.current = Date.now();
-            } else {
-                console.log(`Document is visible at ${new Date(Date.now())}`);
-                if (visibilityChangeTimeRef.current !== null) {
-                    const inactivityDuration = Date.now() - visibilityChangeTimeRef.current;
-                    console.log(`Document was hidden for ${inactivityDuration} ms.`);
-                    if (inactivityDuration > props.threshold) {
-                        console.log('Reloading page...');
-                        window.location.reload();
-                    }
-                }
-            }
-        }
-        
-        document.addEventListener('visibilitychange', handleVisibilityChange);
-        return (): void => {
-            document.removeEventListener('visibilitychange', handleVisibilityChange);
-        };
-    });
-
-    return <></>;
 }
 
 function Chords(props: {sameRootRunsDown: boolean}): JSX.Element {
