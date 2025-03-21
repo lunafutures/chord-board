@@ -26,6 +26,7 @@ interface ChordSettings {
     rangeHigh: number;
     preferSharp: boolean;
     mobileDetect: MobileDetect;
+    updateCurrentChord: (chord: string) => void;
 }
 
 const ChordSettingsContext = React.createContext<ChordSettings>(null as unknown as ChordSettings);
@@ -39,6 +40,7 @@ function App(): JSX.Element {
     const [preferSharp, setPreferSharp] = React.useState(false);
     const [volume, setVolume] = React.useState(INITIAL_VOLUME);
     const mobileDetect = React.useMemo(() => new MobileDetect(window.navigator.userAgent), []);
+    const [currentChord, updateCurrentChord] = React.useState<string | null>(null);
 
     React.useEffect(() => {
         console.log(`Setting volume to ${volume} dB.`);
@@ -86,6 +88,11 @@ function App(): JSX.Element {
                         />
                     </div>
                 </div>
+                <div>
+                    <span className={"chord-name " + ((currentChord === null) ? "nothing-playing" : "")}>
+                        {(currentChord === null) ? "Nothing played yet." : currentChord}
+                    </span>
+                </div>
                 <ChordSettingsContext.Provider
                     value={{
                         synth,
@@ -93,6 +100,7 @@ function App(): JSX.Element {
                         rangeHigh: range[1],
                         preferSharp,
                         mobileDetect,
+                        updateCurrentChord,
                     }}>
                     <Chords sameRootRunsDown={true} />
                 </ChordSettingsContext.Provider>
@@ -162,6 +170,7 @@ function ChordButton(props: {
             window.location.reload();
         }
 
+        settings.updateCurrentChord(`${rootString} ${props.chord.name}`);
         const notes = _
             .flatMap(midiNote.withChord(props.chord), (value: number) => {
                 return allOctaveSet.map(o => value + o);
