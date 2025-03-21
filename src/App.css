@@ -5,6 +5,8 @@ body {
 #root {
     --button-size: min(calc(100vw / 12), 40px);
     --musical-range-slider-width: calc(12 * var(--button-size) - 16px);
+    --default-saturation: 35%;
+    --default-lightness: 60%;
 }
 
 .App {
@@ -62,6 +64,13 @@ body {
     line-height: 1.0;
 }
 
+.chord-name-colorful {
+    color: hsl(
+        var(--current-chord-hue),
+        var(--default-saturation),
+        var(--default-lightness));
+}
+
 .nothing-playing {
     color: rgb(43, 43, 43);
 }
@@ -111,7 +120,10 @@ body {
 }
 
 .chord-button-colorful {
-    --button-color: hsl(var(--button-hue), 35%, 60%) ;
+    --button-color: hsl(
+        var(--button-hue),
+        var(--default-saturation),
+        var(--default-lightness));
     background-color: transparent;
     color: var(--button-color);
     border-color: var(--button-color);

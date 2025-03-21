@@ -27,7 +27,7 @@ interface ChordSettings {
     preferSharp: boolean;
     mobileDetect: MobileDetect;
     rainbowMode: boolean;
-    updateCurrentChord: (chord: string) => void;
+    updateCurrent: (chord: string, hue: number) => void;
 }
 
 const ChordSettingsContext = React.createContext<ChordSettings>(null as unknown as ChordSettings);
@@ -42,6 +42,7 @@ function App(): JSX.Element {
     const [volume, setVolume] = React.useState(INITIAL_VOLUME);
     const mobileDetect = React.useMemo(() => new MobileDetect(window.navigator.userAgent), []);
     const [currentChord, updateCurrentChord] = React.useState<string | null>(null);
+    const [currentHue, updateCurrentHue] = React.useState<number>(0);
     const [rainbowMode, updateRainbowMode] = React.useState(false);
 
     React.useEffect(() => {
@@ -100,7 +101,13 @@ function App(): JSX.Element {
                     </div>
                 </div>
                 <div>
-                    <span className={"chord-name " + ((currentChord === null) ? "nothing-playing" : "")}>
+                    <span
+                        className={
+                            "chord-name "
+                            + ((currentChord === null) ? "nothing-playing" :
+                                (rainbowMode ? 'chord-name-colorful' : ""))}
+                        style={{ "--current-chord-hue": currentHue } as React.CSSProperties}
+                    >
                         {(currentChord === null) ? "Nothing played yet." : currentChord}
                     </span>
                 </div>
@@ -112,7 +119,10 @@ function App(): JSX.Element {
                         preferSharp,
                         mobileDetect,
                         rainbowMode,
-                        updateCurrentChord,
+                        updateCurrent: (chord: string, hue: number) => {
+                            updateCurrentChord(chord);
+                            updateCurrentHue(hue);
+                        },
                     }}>
                         <Chords sameRootRunsDown={true} />
                 </ChordSettingsContext.Provider>
@@ -186,7 +196,7 @@ function ChordButton(props: {
             window.location.reload();
         }
 
-        settings.updateCurrentChord(`${rootString} ${props.chord.name}`);
+        settings.updateCurrent(`${rootString} ${props.chord.name}`, props.hue);
         const notes = _
             .flatMap(midiNote.withChord(props.chord), (value: number) => {
                 return allOctaveSet.map(o => value + o);
