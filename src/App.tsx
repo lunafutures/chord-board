@@ -26,8 +26,8 @@ interface ChordSettings {
     rangeLow: number;
     rangeHigh: number;
     preferSharp: boolean;
-    mobileDetect: MobileDetect;
     rainbowMode: boolean;
+    notDesktop: string | null;
     updateCurrent: (chord: string, hue: number) => void;
 }
 
@@ -123,8 +123,8 @@ function App(): JSX.Element {
                         rangeLow: range[0],
                         rangeHigh: range[1],
                         preferSharp,
-                        mobileDetect,
                         rainbowMode,
+                        notDesktop: mobileDetect.mobile() || mobileDetect.tablet(),
                         updateCurrent: (chord: string, hue: number) => {
                             updateCurrentChord(chord);
                             updateCurrentHue(hue);
@@ -215,7 +215,7 @@ function ChordButton(props: {
         console.log(`Playing notes: ${notes}`);
         settings.synth.releaseAll();
 
-        if (settings.mobileDetect.mobile()) {
+        if (settings.notDesktop) {
             // On mobile, we don't expect the user to hold the note.
             settings.synth.triggerAttackRelease(notes, '2n');
         } else {
@@ -230,7 +230,7 @@ function ChordButton(props: {
     }
 
     function mouseUp(): void {
-        if (settings.mobileDetect.mobile()) return;
+        if (settings.notDesktop) return;
 
         releaseNotes();
         releaseIsPending.current = true;
