@@ -159,7 +159,7 @@ function ChordButton(props: {
     const abbrChordName = `${rootString}${'\u200B'}${props.chord.abbreviation}`;
     const releaseIsPending = React.useRef(false);
 
-    if (settings == null) {
+    if (settings === null) {
         return <></>;
     }
 

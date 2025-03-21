@@ -13,6 +13,7 @@ export default [
         },
         rules: {
             semi: [2, "always"],
+            eqeqeq: ["error", "always"],
             "@typescript-eslint/explicit-function-return-type": "error",
         },
     },

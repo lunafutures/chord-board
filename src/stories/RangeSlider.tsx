@@ -99,7 +99,7 @@ export function MusicalRangeSlider({
                     value={thumbsToMove}
                     exclusive
                     onChange={(_event, newValue: ThumbsToMove | null) => {
-                        if (newValue == null) return;
+                        if (newValue === null) return;
                         setThumbsToMove(newValue);
                     }}
                     aria-label="Platform"
