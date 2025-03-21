@@ -157,6 +157,7 @@ function ChordButton(props: {
     const settings = React.useContext(ChordSettingsContext);
     const rootString = midiNote.rootString(settings.preferSharp);
     const abbrChordName = `${rootString}${'\u200B'}${props.chord.abbreviation}`;
+    const releaseIsPending = React.useRef(false);
 
     if (settings == null) {
         return <></>;
@@ -167,6 +168,8 @@ function ChordButton(props: {
     }
 
     async function mouseDown(): Promise<void> {
+        releaseIsPending.current = false;
+
         /* First check if we can actually play a sound or not.
          * For some reason, sometimes Tone.start() will actually NEVER resolve and
          * no sound can be played. In that case, refresh the page. */ 
@@ -197,9 +200,20 @@ function ChordButton(props: {
         // TODO: Handle time differently if in mobile or desktop
         settings.synth.releaseAll();
         settings.synth.triggerAttack(notes);
+
+        if (releaseIsPending.current) {
+            releaseNotes();
+            releaseIsPending.current = false;
+            console.log("Release of notes was still pending.");
+        }
     }
 
     function mouseUp(): void {
+        releaseNotes();
+        releaseIsPending.current = true;
+    }
+
+    function releaseNotes(): void {
         settings.synth.releaseAll(toneNow() + 0.3);
     }
 
