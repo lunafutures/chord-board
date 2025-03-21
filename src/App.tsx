@@ -22,7 +22,7 @@ const darkTheme = createTheme({
 });
 
 interface ChordSettings {
-    synth: MySynth;
+    synth: ChordSynth;
     rangeLow: number;
     rangeHigh: number;
     preferSharp: boolean;
@@ -33,7 +33,7 @@ interface ChordSettings {
 
 const ChordSettingsContext = React.createContext<ChordSettings>(null as unknown as ChordSettings);
 
-type MySynth = PolySynth<Synth<SynthOptions>>;
+type ChordSynth = PolySynth<Synth<SynthOptions>>;
 function App(): JSX.Element {
     const [range, setRange] = useLocalStorage('range', MusicalRangeDefault);
     const [thumbsToMove, setThumbsToMove] = useLocalStorage('thumbs', ThumbsToMoveDefault);
@@ -41,7 +41,7 @@ function App(): JSX.Element {
     const [volume, setVolume] = useLocalStorage('volume', INITIAL_VOLUME);
     const [rainbowMode, updateRainbowMode] = useLocalStorage<boolean>('rainbow-mode', false);
 
-    const synth: MySynth = React.useMemo(() => new PolySynth({maxPolyphony: 100}).toDestination(), []);
+    const synth: ChordSynth = React.useMemo(() => new PolySynth({maxPolyphony: 100}).toDestination(), []);
     const mobileDetect = React.useMemo(() => new MobileDetect(window.navigator.userAgent), []);
 
     const [currentChord, updateCurrentChord] = React.useState<string | null>(null);
