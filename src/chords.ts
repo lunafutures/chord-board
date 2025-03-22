@@ -6,7 +6,6 @@ export interface Chord {
 }
 
 export const chords: Chord[] = [
-    // Essential Chords
     {
         name: 'Major',
         abbreviation: '',
@@ -37,8 +36,6 @@ export const chords: Chord[] = [
         formula: [0, 3, 7, 10],
         intervals: ['1', 'b3', '5', 'b7']
     },
-
-    // Highly Recommended Chords
     {
         name: 'Diminished',
         abbreviation: 'dim',
@@ -88,13 +85,11 @@ export const chords: Chord[] = [
         intervals: ['1', '3', '5', '7', '9']
     },
     {
-        name: 'Power',
+        name: 'Power Chord',
         abbreviation: '5',
         formula: [0, 7],
         intervals: ['1', '5']
     },
-
-    // Advanced Chords
     {
         name: 'Dominant 13',
         abbreviation: '13',
@@ -137,8 +132,6 @@ export const chords: Chord[] = [
         formula: [0, 4, 7, 9],
         intervals: ['1', '3', '5', '6']
     },
-
-    // Optional Chords
     {
         name: '7♭9',
         abbreviation: '7♭9',
