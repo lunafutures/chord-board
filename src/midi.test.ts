@@ -21,7 +21,7 @@ const midiTestCases: MidiTestCase[] = [
 ];
 
 describe('midi standard tests', () => {
-    test.each(midiTestCases)('midi value to string', ({ inputValue, preferSharp, expectedString }) => {
+    test.each(midiTestCases)('midi value $inputValue should create string $expectedString', ({ inputValue, preferSharp, expectedString }) => {
         expect(new MidiNote(inputValue).toString(preferSharp))
             .toStrictEqual(expectedString);
     });

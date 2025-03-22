@@ -30,9 +30,9 @@ function convertIntervalToOrdinal(interval: string): number {
 }
 
 describe('chords', () => {
-    test.each(chords)('formula matches intervals', (chord: Chord) => {
-        expect(chord.intervals.length).toEqual(chord.formula.length);
-        zip(chord.intervals, chord.formula).forEach(([interval, ordinal]) => {
+    test.each(chords)('$name chord\'s formula matches intervals', ({intervals, formula}: Chord) => {
+        expect(intervals.length).toEqual(formula.length);
+        zip(intervals, formula).forEach(([interval, ordinal]) => {
             if (interval === undefined) {
                 fail(`interval was undefined (ordinal=${ordinal})`);
             } else if (ordinal === undefined) {
