@@ -127,6 +127,12 @@ export const chords: Chord[] = [
         intervals: ['1', 'b3', '5', 'b7', '9']
     },
     {
+        name: 'Dominant 11',
+        abbreviation: '11',
+        formula: [0, 7, 10, 14, 17],
+        intervals: ['1', '5', 'b7', '9', '11'] // The 3rd is typically removed because of dissonance.
+    },
+    {
         name: 'Major 11',
         abbreviation: '△11',
         formula: [0, 4, 7, 11, 14, 17],
