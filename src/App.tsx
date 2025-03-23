@@ -184,7 +184,7 @@ function Chords(props: {sameRootRunsDown: boolean}): JSX.Element {
     </div>;
 }
 
-const allOctaveSet = _.range(12, MusicalRangeMidiMaxDefault, 12);
+const allOctaveSet = _.range(-12, MusicalRangeMidiMaxDefault, 12);
 function ChordButton(props: {
     rootMidiValue: number,
     chord: Chord,
