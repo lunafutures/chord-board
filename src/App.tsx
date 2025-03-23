@@ -86,7 +86,7 @@ function App(): JSX.Element {
                     <button
                         className={'rainbow-button ' + (rainbowMode ? 'rainbow-mode-on' : '')}
                         onClick={() => updateRainbowMode(prev => !prev)}
-                        >
+                    >
                         <div>R{notDesktop ? 'a' : 'ɑ'}inbow</div>
                         <div>Mode</div>
                     </button>
@@ -99,13 +99,13 @@ function App(): JSX.Element {
                         <DbVolumeSlider
                             initial={volume}
                             onVolumeChanged={React.useCallback(setVolume, [setVolume])}
-                            />
+                        />
                     </div>
                     <div className="prefer-sharp-picker">
                         <PreferSharpPicker
                             initial={preferSharp}
                             onPreferSharpChanged={React.useCallback(setPreferSharp, [setPreferSharp])}
-                            />
+                        />
                     </div>
                 </div>
                 <div className="range-section">
@@ -154,7 +154,7 @@ function App(): JSX.Element {
                             updateCurrentHue(hue);
                         },
                     }}>
-                        <Chords sameRootRunsDown={true} />
+                    <Chords sameRootRunsDown={true} />
                 </ChordSettingsContext.Provider>
             </div>
         </ThemeProvider>
@@ -174,7 +174,7 @@ function Chords(props: {sameRootRunsDown: boolean}): JSX.Element {
                     column={props.sameRootRunsDown ? i + 1 : j + 1}
                     row={props.sameRootRunsDown ? j + 1 : i + 1}
                     hue={hue}
-                    />
+                />
             );
         });
     });

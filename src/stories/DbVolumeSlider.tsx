@@ -34,7 +34,7 @@ export function DbVolumeSlider({
             spacing={2}
             direction="row"
             sx={{ alignItems: 'center', mb: 1 }}
-            >
+        >
             <VolumeDown />
             <Slider
                 min={min}
@@ -49,7 +49,7 @@ export function DbVolumeSlider({
                 }}
                 color={'secondary'}
                 aria-label="Volume"
-                />
+            />
             <VolumeUp />
         </Stack>
     );

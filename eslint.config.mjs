@@ -15,6 +15,7 @@ export default [
             semi: [2, 'always'],
             eqeqeq: ['error', 'always'],
             quotes: ['error', 'single'],
+            indent: ['error', 4, { 'SwitchCase': 1 }],
             '@typescript-eslint/explicit-function-return-type': 'error',
         },
     },
