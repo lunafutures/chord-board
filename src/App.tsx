@@ -161,12 +161,6 @@ function App(): JSX.Element {
     );
 }
 
-(async (): Promise<void> => {
-    const parser = new UAParser();
-    const browserInfo = await parser.getBrowser().withClientHints();
-    console.log('Browser Info with Client Hints:', browserInfo);
-})();
-
 function Chords(props: {sameRootRunsDown: boolean}): JSX.Element {
     const buttons: JSX.Element[] = [];
     _.range(0, 12).map((rootMidiValue, i) => {
