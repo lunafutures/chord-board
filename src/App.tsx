@@ -45,10 +45,23 @@ function App(): JSX.Element {
 
     const synth: ChordSynth = React.useMemo(() => new PolySynth({maxPolyphony: 100}).toDestination(), []);
     const mobileDetect = React.useMemo(() => new MobileDetect(window.navigator.userAgent), []);
+    const uaParser = React.useMemo(() => new UAParser(), []);
 
+    const [notDesktop, updateNotDesktop] = React.useState(false);
     const [currentChord, updateCurrentChord] = React.useState<string | null>(null);
     const [currentHue, updateCurrentHue] = React.useState<number>(0);
     const dummyAudio = React.useRef<HTMLAudioElement>(null);
+
+    React.useEffect(() => {
+        asyncGetNotDesktop();
+
+        async function asyncGetNotDesktop(): Promise<void> {
+            const deviceInfo = await uaParser.getDevice().withClientHints();
+            console.log('UAParser device info:', deviceInfo);
+            const uaNotDesktop = deviceInfo.type === 'tablet' || deviceInfo.type === 'mobile';
+            updateNotDesktop(Boolean(mobileDetect.mobile() || mobileDetect.tablet()) || uaNotDesktop);
+        };
+    });
 
     React.useEffect(() => {
         console.log(`Setting volume to ${volume} dB.`);
@@ -74,7 +87,7 @@ function App(): JSX.Element {
                         className={'rainbow-button ' + (rainbowMode ? 'rainbow-mode-on' : '')}
                         onClick={() => updateRainbowMode(prev => !prev)}
                         >
-                        <div>Rainbow</div>
+                        <div>R{notDesktop ? 'a' : 'ɑ'}inbow</div>
                         <div>Mode</div>
                     </button>
                 </div>
@@ -135,7 +148,7 @@ function App(): JSX.Element {
                         preferSharp,
                         rainbowMode,
                         dummyAudio: dummyAudio.current,
-                        notDesktop: Boolean(mobileDetect.mobile() || mobileDetect.tablet()),
+                        notDesktop,
                         updateCurrent: (chord: string, hue: number) => {
                             updateCurrentChord(chord);
                             updateCurrentHue(hue);
