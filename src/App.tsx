@@ -27,6 +27,7 @@ interface ChordSettings {
     rangeHigh: number;
     preferSharp: boolean;
     rainbowMode: boolean;
+    dummyAudio: HTMLAudioElement | null,
     notDesktop: string | null;
     updateCurrent: (chord: string, hue: number) => void;
 }
@@ -46,6 +47,7 @@ function App(): JSX.Element {
 
     const [currentChord, updateCurrentChord] = React.useState<string | null>(null);
     const [currentHue, updateCurrentHue] = React.useState<number>(0);
+    const dummyAudio = React.useRef<HTMLAudioElement>(null);
 
     React.useEffect(() => {
         console.log(`Setting volume to ${volume} dB.`);
@@ -55,6 +57,13 @@ function App(): JSX.Element {
     return (
         <ThemeProvider theme={darkTheme}>
             <InactivityChecker thresholdMillis={INACTIVITY_THRESHOLD} />
+
+            <audio ref={dummyAudio}>
+                <source
+                    src={`${process.env.PUBLIC_URL}/silence-1ms.mp3`}
+                    type="audio/mp3" />
+                Warning: Your outdated browser does not support the audio element.
+            </audio>
             <div className="App">
                 <div className="title-bar">
                     <div className="title">
@@ -124,6 +133,7 @@ function App(): JSX.Element {
                         rangeHigh: range[1],
                         preferSharp,
                         rainbowMode,
+                        dummyAudio: dummyAudio.current,
                         notDesktop: mobileDetect.mobile() || mobileDetect.tablet(),
                         updateCurrent: (chord: string, hue: number) => {
                             updateCurrentChord(chord);
@@ -183,6 +193,8 @@ function ChordButton(props: {
     }
 
     async function mouseDown(): Promise<void> {
+        settings.dummyAudio?.play();
+
         releaseIsPending.current = false;
 
         /* First check if we can actually play a sound or not.
@@ -190,7 +202,7 @@ function ChordButton(props: {
          * no sound can be played. In that case, refresh the page. */ 
         try {
             const timeoutPromise = new Promise((resolve, reject) =>
-                setTimeout(() => reject(new Error('Audio startup timeout')), 500));
+                setTimeout(() => reject(new Error('Audio startup timeout')), 5000));
 
             await Promise.race([
                 start(),
@@ -213,6 +225,7 @@ function ChordButton(props: {
 
         console.log(`Limiting to notes between ${noteStr(settings.rangeLow)} and ${noteStr(settings.rangeHigh)}`);
         console.log(`Playing notes: ${notes}`);
+
         settings.synth.releaseAll();
 
         if (settings.notDesktop) {
