@@ -11,6 +11,7 @@ import { PreferSharpPicker } from './stories/PreferSharpPicker';
 import { InactivityChecker } from './InactivityChecker';
 import MobileDetect from 'mobile-detect';
 import { useLocalStorage } from 'usehooks-ts';
+import { UAParser } from 'ua-parser-js';
 
 const INACTIVITY_THRESHOLD = 5 * 60 * 1000;
 const INITIAL_VOLUME = DB_DEFAULT_VOLUME;
@@ -28,7 +29,7 @@ interface ChordSettings {
     preferSharp: boolean;
     rainbowMode: boolean;
     dummyAudio: HTMLAudioElement | null,
-    notDesktop: string | null;
+    notDesktop: boolean;
     updateCurrent: (chord: string, hue: number) => void;
 }
 
@@ -134,7 +135,7 @@ function App(): JSX.Element {
                         preferSharp,
                         rainbowMode,
                         dummyAudio: dummyAudio.current,
-                        notDesktop: mobileDetect.mobile() || mobileDetect.tablet(),
+                        notDesktop: Boolean(mobileDetect.mobile() || mobileDetect.tablet()),
                         updateCurrent: (chord: string, hue: number) => {
                             updateCurrentChord(chord);
                             updateCurrentHue(hue);
@@ -146,6 +147,12 @@ function App(): JSX.Element {
         </ThemeProvider>
     );
 }
+
+(async (): Promise<void> => {
+    const parser = new UAParser();
+    const browserInfo = await parser.getBrowser().withClientHints();
+    console.log('Browser Info with Client Hints:', browserInfo);
+})();
 
 function Chords(props: {sameRootRunsDown: boolean}): JSX.Element {
     const buttons: JSX.Element[] = [];
