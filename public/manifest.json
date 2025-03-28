@@ -17,9 +17,9 @@
   ],
   "display": "standalone",
 
-  "_comment_theme_color": "Color of the top bar on the phone.",
-  "theme_color": "#90caf9",
+  "_comment_theme_color": "Color of the top bar (pulls down for notifications) on the phone.",
+  "theme_color": "#252e36",
 
-  "_comment_background_color": "Color of the bottom bar on the phone.",
+  "_comment_background_color": "Color of the bottom bar (e.g. home, back) on the phone.",
   "background_color": "#000000"
 }
