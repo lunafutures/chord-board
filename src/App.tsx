@@ -33,6 +33,7 @@ interface ChordSettings {
     rainbowMode: boolean;
     dummyAudio: HTMLAudioElement | null,
     notDesktop: boolean;
+    transpose: number;
     updateCurrent: (chord: string, hue: number) => void;
 }
 
@@ -177,6 +178,7 @@ function App(): JSX.Element {
                         rainbowMode,
                         dummyAudio: dummyAudio.current,
                         notDesktop,
+                        transpose,
                         updateCurrent: (chord: string, hue: number) => {
                             updateCurrentChord(chord);
                             updateCurrentHue(hue);
@@ -257,13 +259,17 @@ function ChordButton(props: {
         }
 
         settings.updateCurrent(`${rootString} ${props.chord.name}`, props.hue);
-        const notes = _
-            .flatMap(midiNote.withChord(props.chord), (value: number) => {
+        const notes = _((midiNote).withChord(props.chord))
+            .map((value: number) => {
+                return value + settings.transpose;
+            })
+            .flatMap((value: number) => {
                 return allOctaveSet.map(o => value + o);
             })
             .sort()
             .filter((value) => settings.rangeLow <= value && value < settings.rangeHigh)
-            .map(value => noteStr(value));
+            .map(value => noteStr(value))
+            .value();
 
         console.log(`Limiting to notes between ${noteStr(settings.rangeLow)} and ${noteStr(settings.rangeHigh)}`);
         console.log(`Playing notes: ${notes}`);
