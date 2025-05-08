@@ -5,7 +5,7 @@ import { Chord, chords } from './chords';
 import _ from 'lodash';
 import { PolySynth, start, Synth, SynthOptions, now as toneNow } from 'tone';
 import { MusicalRangeDefault, MusicalRangeMidiMaxDefault, MusicalRangeMidiMinDefault, MusicalRangeSlider, ThumbsToMoveDefault } from './stories/RangeSlider';
-import { createTheme, ThemeProvider } from '@mui/material';
+import { createTheme, Slider, ThemeProvider } from '@mui/material';
 import { DB_DEFAULT_VOLUME, DbVolumeSlider } from './stories/DbVolumeSlider';
 import { PreferSharpPicker } from './stories/PreferSharpPicker';
 import { InactivityChecker } from './InactivityChecker';
@@ -15,6 +15,9 @@ import { UAParser } from 'ua-parser-js';
 
 const INACTIVITY_THRESHOLD = 5 * 60 * 1000;
 const INITIAL_VOLUME = DB_DEFAULT_VOLUME;
+
+const TRANSPOSE_MIN = -12;
+const TRANSPOSE_MAX = 12;
 
 const darkTheme = createTheme({
     palette: {
@@ -42,6 +45,7 @@ function App(): JSX.Element {
     const [preferSharp, setPreferSharp] = useLocalStorage('prefer-sharp', false);
     const [volume, setVolume] = useLocalStorage('volume', INITIAL_VOLUME);
     const [rainbowMode, updateRainbowMode] = useLocalStorage<boolean>('rainbow-mode', false);
+    const [transpose, setTranspose] = useLocalStorage<number>('transpose', 0);
 
     const synth: ChordSynth = React.useMemo(() => new PolySynth({maxPolyphony: 100}).toDestination(), []);
     const mobileDetect = React.useMemo(() => new MobileDetect(window.navigator.userAgent), []);
@@ -90,6 +94,30 @@ function App(): JSX.Element {
                         <div>R{notDesktop ? 'a' : 'ɑ'}inbow</div>
                         <div>Mode</div>
                     </button>
+                </div>
+                <div className='transpose-section'>
+                    <span className="large-label transpose-label">
+                        Transpose:
+                    </span>
+                    <div className='transpose-slider'>
+                        <Slider
+                            min={TRANSPOSE_MIN}
+                            max={TRANSPOSE_MAX}
+                            valueLabelDisplay={'auto'}
+                            valueLabelFormat={(value: number) => value.toString()}
+                            value={transpose}
+                            onChange={(event, newValue) => {
+                                if (typeof newValue !== 'number') return;
+
+                                setTranspose(newValue);
+                            }}
+                            color={'info'}
+                            aria-label="Transpose"
+                        />
+                    </div>
+                    <div className='transpose-indicator'>
+                        {numberToPlusOrMinus(transpose)}
+                    </div>
                 </div>
                 <div className="top-settings">
                     <span className="large-label volume-label">
@@ -283,6 +311,10 @@ function ChordButton(props: {
             </span>
         </button>
     );
+}
+
+function numberToPlusOrMinus(value: number): string {
+    return value >= 0 ? '+' + value : value.toString();
 }
 
 export default App;

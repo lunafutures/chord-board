@@ -76,6 +76,35 @@ body {
     color: rgb(43, 43, 43);
 }
 
+.transpose-section {
+    display: grid;
+    grid-template-rows: auto auto;
+    grid-template-columns: 30% 8% 1fr;
+    row-gap: 8px;
+    column-gap: 10px;
+    width: var(--musical-range-slider-width);
+}
+
+.transpose-label {
+    text-align: left;
+    grid-row-start: 1;
+    grid-column-start: 1;
+    grid-column-end: 3;
+}
+
+.transpose-slider {
+    grid-row-start: 2;
+    grid-column-start: 1;
+    grid-column-end: 2;
+}
+
+.transpose-indicator {
+    grid-row-start: 2;
+    grid-column-start: 2;
+    grid-column-end: 3;
+    color: white;
+}
+
 .top-settings {
     display: grid;
     grid-template-rows: auto auto;
