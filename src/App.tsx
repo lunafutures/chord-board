@@ -34,7 +34,7 @@ interface ChordSettings {
     dummyAudio: HTMLAudioElement | null,
     notDesktop: boolean;
     transpose: number;
-    updateCurrent: (chord: string, hue: number) => void;
+    updateCurrent: (chord: string, hue: number, transpose: number) => void;
 }
 
 const ChordSettingsContext = React.createContext<ChordSettings>(null as unknown as ChordSettings);
@@ -55,6 +55,7 @@ function App(): JSX.Element {
     const [notDesktop, updateNotDesktop] = React.useState(false);
     const [currentChord, updateCurrentChord] = React.useState<string | null>(null);
     const [currentHue, updateCurrentHue] = React.useState<number>(0);
+    const [currentTranspose, updateCurrentTranspose] = React.useState<number>(0);
     const dummyAudio = React.useRef<HTMLAudioElement>(null);
 
     React.useEffect(() => {
@@ -166,7 +167,11 @@ function App(): JSX.Element {
                                 (rainbowMode ? 'chord-name-colorful' : ''))}
                         style={{ '--current-chord-hue': currentHue } as React.CSSProperties}
                     >
-                        {(currentChord === null) ? 'Nothing played yet.' : currentChord}
+                        {
+                            (currentChord === null) ?
+                                'Nothing played yet.' :
+                                currentChord + (currentTranspose !== 0 ? ` (${numberToPlusOrMinus(currentTranspose)})` : '')
+                        }
                     </span>
                 </div>
                 <ChordSettingsContext.Provider
@@ -179,9 +184,10 @@ function App(): JSX.Element {
                         dummyAudio: dummyAudio.current,
                         notDesktop,
                         transpose,
-                        updateCurrent: (chord: string, hue: number) => {
+                        updateCurrent: (chord: string, hue: number, transpose: number) => {
                             updateCurrentChord(chord);
                             updateCurrentHue(hue);
+                            updateCurrentTranspose(transpose);
                         },
                     }}>
                     <Chords sameRootRunsDown={true} />
@@ -258,7 +264,7 @@ function ChordButton(props: {
             window.location.reload();
         }
 
-        settings.updateCurrent(`${rootString} ${props.chord.name}`, props.hue);
+        settings.updateCurrent(`${rootString} ${props.chord.name}`, props.hue, settings.transpose);
         const notes = _((midiNote).withChord(props.chord))
             .map((value: number) => {
                 return value + settings.transpose;
